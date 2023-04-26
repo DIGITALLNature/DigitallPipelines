@@ -1,0 +1,69 @@
+# Deploy solutions using a given solution configuration to different environments
+# Needs to be started manually
+
+# No automated trigger
+trigger: none
+
+resources:
+  repositories:
+    # Add a reference to the pipelinetemplates repository where all the templates are located
+    # No need to clone them, the templates can be referenced directly
+    - repository: pipelinetemplates
+      type: github
+      name: DIGITALLNature/DigitallPipelines
+
+      # By default the default branch is used. If this is not the same default between projects
+      # (for most it is main, but for some it still is master) or a different one should be
+      # used, the ref mus be set:
+      # ref: refs/heads/preview
+      # ref: refs/heads/master
+
+# By default use an ubuntu image
+pool:
+  vmImage: ubuntu-latest
+
+# Use default variable groups (see /docs/variable-groups.md) namely the variables:
+# - PowerPlatformServiceConnectionName
+# - SolutionConfigList
+# - SolutionConfigListReverse
+variables:
+  - group: Power Platform Deployment Connection
+  - template: ../deployment-settings/solution-configuration/solution-configuration.yml
+
+# Extends from pipeline template that imports in stages
+extends:
+  template: azure-pipeline-templates/pp-solution-import/import-stages.yml@pipelinetemplates
+  parameters:
+    serviceConnection: $(PowerPlatformServiceConnectionName)
+    solutionList: ${{ variables.SolutionConfigList }}
+    solutionListReverse: ${{ variables.SolutionConfigListReverse }}
+
+    # List of environments and information about them
+    # Every environment will become its own stage in the pipeline
+    # - friendlyName: Used for display names and finding default variable group and environment names
+    # - uniqueName: Used for job and artifact names as well as configuration files
+    # - variables: List of variables to be used for the environment
+    #   > This is optional. If not set will use the variables from:
+    #   > group: Power Platform Environment [friendlyName]
+    # - devOpsEnvironment: Name of the environment in DevOps
+    #   > This is optional. If not set will use the environment name:
+    #   > Power Platform Environment [friendlyName]
+    environments:
+
+      # Sample (simplest) configuration for a sit environment
+      - friendlyName: System Integration Testing
+        uniqueName: sit
+
+      # Sample configuration for a uat environment
+      # We override the default variable group, because the variable group was name using short name
+      - friendlyName: User Acceptance Testing
+        uniqueName: uat
+        variables:
+          - group: Power Platform Environment UAT
+
+      # Sample configuration for a prod environment
+      # We override the default environment name, because the environment was named after system name
+      #   so that it is easier to understand for approver
+      - friendlyName: Production
+        uniqueName: prod
+        devOpsEnvironment: Power Platform Environment PROD

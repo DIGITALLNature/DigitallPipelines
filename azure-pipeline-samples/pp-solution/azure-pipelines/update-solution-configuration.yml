@@ -1,0 +1,44 @@
+# Update solution configuration from active carriers
+# Runs on a nightly schedule but scheduled before other regular pipelines might be starting
+
+# Trigger the pipeline automatically every night (at midnight UTC)
+schedules:
+  - cron: '0 0 * * *'
+    displayName: Start midnight solution configuration update
+    branches:
+      include:
+        - main
+    always: true # Trigger even if there were no changes
+
+resources:
+  repositories:
+    # Add a reference to the pipelinetemplates repository where all the templates are located
+    # No need to clone them, the templates can be referenced directly
+    - repository: pipelinetemplates
+      type: github
+      name: DIGITALLNature/DigitallPipelines
+
+      # By default the default branch is used. If this is not the same default between projects
+      # (for most it is main, but for some it still is master) or a different one should be
+      # used, the ref mus be set:
+      # ref: refs/heads/preview
+      # ref: refs/heads/master
+
+# By default use an ubuntu image
+pool:
+  vmImage: ubuntu-latest
+
+# Use default variable groups (see /docs/variable-groups.md) namely the variables:
+# - PowerPlatformUrl
+# - PowerPlatformEnvironmentFriendlyName
+# - PowerPlatformServiceConnectionName
+variables:
+  - group: Power Platform Environment Development
+  - group: Power Platform Deployment Connection
+
+# Extend from pipeline template that generates the solution configuration
+extends:
+  template: azure-pipeline-templates/pp-solution-configuration/generate-from-carrier.yml@pipelinetemplates
+  parameters:
+    serviceConnection: $(PowerPlatformServiceConnectionName)
+    environmentName: $(PowerPlatformEnvironmentFriendlyName)

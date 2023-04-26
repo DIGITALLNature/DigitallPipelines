@@ -1,0 +1,76 @@
+# Upload website to target environment
+
+# No automated trigger
+trigger: none
+
+resources:
+  repositories:
+    # Add a reference to the pipelinetemplates repository where all the templates are located
+    # No need to clone them, the templates can be referenced directly
+    - repository: pipelinetemplates
+      type: github
+      name: DIGITALLNature/DigitallPipelines
+
+      # By default the default branch is used. If this is not the same default between projects
+      # (for most it is main, but for some it still is master) or a different one should be
+      # used, the ref mus be set:
+      # ref: refs/heads/preview
+      # ref: refs/heads/master
+
+# By default use an ubuntu image
+pool:
+  vmImage: ubuntu-latest
+
+# Use default variable groups (see /docs/variable-groups.md) namely the variables:
+# - PowerPlatformUrl
+# - PowerPlatformServiceConnectionName
+# - PowerPlatformWebsiteId
+# - PowerPlatformWebsiteFolderName
+variables:
+  - group: Power Platform Deployment Connection
+  - group: Power Platform Website MyWebsiteName
+
+  # Take target environment dependent on given parameter
+  - ${{ if eq(parameters.TargetEnvironment, 'Development') }}:
+    - group: Power Platform Environment Development
+  - ${{ elseif eq(parameters.TargetEnvironment, 'Test') }}:
+    - group: Power Platform Environment Test
+  - ${{ elseif eq(parameters.TargetEnvironment, 'Production') }}:
+    - group: Power Platform Environment Production
+
+parameters:
+  # Select which target environment to upload towards
+  - name: TargetEnvironment
+    displayName: Target environment
+    type: string
+    default: Development
+    values:
+      - Development
+      - Test
+      - Production
+
+  # Option to disable backup before upload
+  - name: backup
+    displayName: Make a backup before uploading
+    type: boolean
+    default: true
+
+# Extend from pipeline template that uploads the website content
+extends:
+  template: azure-pipeline-templates/pp-website/upload-job.yml@pipelinetemplates
+  parameters:
+    webSiteId: $(PowerPlatformWebsiteId)
+    folderName: $(PowerPlatformWebsiteFolderName)
+    serviceConnection: $(PowerPlatformServiceConnectionName)
+    backup: ${{ parameters.backup }}
+
+    # Map target environment to correct environment and deployment profile
+    ${{ if eq(parameters.TargetEnvironment, 'Development') }}:
+      devOpsEnvironment: Power Platform Website MyWebsiteName Development
+      deploymentProfile: dev
+    ${{ elseif eq(parameters.TargetEnvironment, 'Test') }}:
+      devOpsEnvironment: Power Platform Website MyWebsiteName Test
+      deploymentProfile: test
+    ${{ elseif eq(parameters.TargetEnvironment, 'Production') }}:
+      devOpsEnvironment: Power Platform Website MyWebsiteName Production
+      deploymentProfile: prod

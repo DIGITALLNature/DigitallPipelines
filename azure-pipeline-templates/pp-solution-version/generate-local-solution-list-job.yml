@@ -1,0 +1,77 @@
+# Extract the list of solutions cloned to a local directory
+#
+# Prerequisites:
+# - Solutions are extracted in local directory subfolder
+
+parameters:
+  # ------ Optional predefined parameters ------
+
+  # Directory of the solution folders
+  - name: solutionDirectory
+    displayName: Solution directory
+    type: string
+    default: $(Build.Repository.LocalPath)/Solutions
+
+  # Output directory for the solution details file. Defaults to the agent's temp directory
+  - name: outputDirectory
+    displayName: Output Directory
+    type: string
+    default: $(Agent.TempDirectory)
+
+  # Name of the solution details file. Defaults to "local-solutions.json"
+  - name: solutionDetailsFileName
+    displayName: Solution Details File Name
+    type: string
+    default: local-solutions.json
+
+  # Relative path of the solution.xml to a solution folder
+  - name: relativeSolutionXmlPath
+    displayName: Relative solution.xml path
+    type: string
+    default: src/Other/Solution.xml
+
+  # Override the job name
+  - name: jobName
+    displayName: Job Name
+    type: string
+    default: generateLocalSolutionList
+
+  # Override artifact name
+  - name: artifactName
+    displayName: Artifact Name
+    type: string
+    default: local-solution-list
+
+  # ------ Optional general feature parameters ------
+
+  # Option to overwrite the condition for this task
+  - name: condition
+    displayName: Overwrite condition for task
+    type: string
+    default: succeeded()
+
+jobs:
+  # Generate solution list and publish as artifact
+  - job: ${{ parameters.jobName }}
+    displayName: Generate local solution list
+    condition: ${{ parameters.condition }}
+
+    steps:
+      # Clone current repository
+      - checkout: self
+        clean: true
+
+      # Generate solution list
+      - template: ../pp-solution-version/generate-local-solution-list.yml
+        parameters:
+          solutionDirectory: ${{ parameters.solutionDirectory }}
+          outputDirectory: ${{ parameters.outputDirectory }}
+          solutionDetailsFileName: ${{ parameters.solutionDetailsFileName }}
+          relativeSolutionXmlPath: ${{ parameters.relativeSolutionXmlPath }}
+
+      # Publish solution list as artifact
+      - task: PublishPipelineArtifact@1
+        displayName: Publish local solution list
+        inputs:
+          artifactName: ${{ parameters.artifactName }}
+          targetPath: ${{ parameters.outputDirectory }}/${{ parameters.solutionDetailsFileName }}

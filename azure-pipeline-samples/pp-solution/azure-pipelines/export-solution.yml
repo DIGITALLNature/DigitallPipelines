@@ -1,0 +1,57 @@
+# Export solution from solution configuration to current repository
+# Runs on a nightly schedule but scheduled after solution configuration was updated
+
+# Trigger the pipeline automatically every night (at one UTC)
+schedules:
+  - cron: '0 1 * * *'
+    displayName: Start export solution
+    branches:
+      include:
+        - main
+    always: true # Trigger even if there were no changes
+
+resources:
+  repositories:
+    # Add a reference to the pipelinetemplates repository where all the templates are located
+    # No need to clone them, the templates can be referenced directly
+    - repository: pipelinetemplates
+      type: github
+      name: DIGITALLNature/DigitallPipelines
+
+      # By default the default branch is used. If this is not the same default between projects
+      # (for most it is main, but for some it still is master) or a different one should be
+      # used, the ref mus be set:
+      # ref: refs/heads/preview
+      # ref: refs/heads/master
+
+# By default use an ubuntu image
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+  - name: publish
+    displayName: Publish changes before exporting
+    type: boolean
+    default: false
+  - name: onlySyncUpdatedSolutions
+    displayName: Only sync solutions with newer version
+    type: boolean
+    default: false
+
+# Use default variable groups (see /docs/variable-groups.md) namely the variables:
+# - PowerPlatformUrl
+# - PowerPlatformServiceConnectionName
+# - SolutionConfigList
+variables:
+  - group: Power Platform Environment Development
+  - group: Power Platform Deployment Connection
+  - template: ../deployment-settings/solution-configuration/solution-configuration.yml
+
+# Extend from pipeline template that generates the solution configuration
+extends:
+  template: azure-pipeline-templates/pp-solution-export/sync-fixed-jobs.yml@pipelinetemplates
+  parameters:
+    onlySyncUpdatedSolutions: ${{ parameters.onlySyncUpdatedSolutions }}
+    publish: ${{ parameters.publish }}
+    serviceConnection: $(PowerPlatformServiceConnectionName)
+    solutionList: ${{ variables.SolutionConfigList }}
