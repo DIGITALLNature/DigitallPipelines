@@ -66,6 +66,16 @@ steps:
     inputs:
       targetType: inline
       script: |
-        dgtp maintenance workflowstate --config '$(setWorkflowState.ConfigFilePath)'
+        $Debug = $env:Debug
+        $ConfigFilePath = $env:ConfigFilePath
+
+        if ($Debug -eq $True) {
+          $ConnectionDebug = $env:dgtp:xrm:connection -Split ";"
+          $ConnectionDebug
+        }
+
+        dgtp maintenance workflowstate --config '$ConfigFilePath'
     env:
+      Debug: $(System.Debug)
       dgtp:xrm:connection: $(dgtp:xrm:connection)
+      ConfigFilePath: $(setWorkflowState.ConfigFilePath)
