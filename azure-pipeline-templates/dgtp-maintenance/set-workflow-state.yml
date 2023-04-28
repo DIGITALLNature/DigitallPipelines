@@ -66,6 +66,6 @@ steps:
     inputs:
       targetType: inline
       script: |
-        dgtp maintenance workflowstate --config '${{ parameters.config }}'
+        dgtp maintenance workflowstate --config '$(setWorkflowState.ConfigFilePath)'
     env:
       dgtp:xrm:connection: $(dgtp:xrm:connection)
