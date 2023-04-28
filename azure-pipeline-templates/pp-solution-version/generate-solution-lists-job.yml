@@ -19,7 +19,7 @@ parameters:
   - name: localSolutionDirectory
     displayName: Local solution directory
     type: string
-    default: $(Build.Repository.LocalPath)/Solutions
+    default: $(Build.Repository.LocalPath)/solutions
 
   # Output directory for the local solution details file. Defaults to the agent's temp directory
   - name: localOutputDirectory

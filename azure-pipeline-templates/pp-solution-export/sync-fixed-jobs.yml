@@ -39,7 +39,7 @@ parameters:
   - name: outputDirectory
     displayName: Path to folder where solutions should be cloned to
     type: string
-    default: "$(Build.Repository.LocalPath)/Solutions"
+    default: "$(Build.Repository.LocalPath)/solutions"
 
   # Branch to push changes to
   - name: branch

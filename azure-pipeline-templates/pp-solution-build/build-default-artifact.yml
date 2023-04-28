@@ -24,7 +24,7 @@ parameters:
   - name: solutionFolder
     displayName: Solution folder
     type: string
-    default: '$(Build.Repository.LocalPath)/Solutions'
+    default: '$(Build.Repository.LocalPath)/solutions'
 
   # Path to deployment settings to use
   # If not set will look for following paths:
