@@ -77,11 +77,17 @@ steps:
       targetType: 'inline'
       script: |
         $Debug = $env:Debug
-        $PowerPlatformConnectionString = "$($env:PowerPlatformConnectionString)"
-        $OutputVariableName = "$($env:OutputVariableName)"
+        $PowerPlatformConnectionString = env:PowerPlatformConnectionString
+        $OutputVariableName = $env:OutputVariableName
+        $ServiceConnectionType = $env:ServiceConnectionType
 
         if ($Debug -eq $True) {
           Write-Host "##[debug]OutputVariableName=$OutputVariableName"
+        }
+
+        if ($ServiceConnectionType -eq "PowerPlatformEnvironment") {
+          Write-Host "##[debug]Replacing url in connection string"
+          $PowerPlatformConnectionString = $PowerPlatformConnectionString -replace 'url=undefined', "url=$PowerPlatformUrl"
         }
 
         Write-Host "##vso[task.setvariable variable=$OutputVariableName;issecret=true;isreadonly=true]$PowerPlatformConnectionString"
@@ -89,3 +95,5 @@ steps:
       Debug: $(System.Debug)
       PowerPlatformConnectionString: $(${{ parameters.connectionTaskName }}.BuildTools.DataverseConnectionString)
       OutputVariableName: ${{ parameters.outputVariableName }}
+      ServiceConnectionType: ${{ parameters.serviceConnectionType }}
+      PowerPlatformUrl: $(PowerPlatformUrl)
