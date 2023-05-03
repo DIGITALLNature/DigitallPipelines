@@ -60,7 +60,6 @@ steps:
     env:
       Debug: $(System.Debug)
       ConfigFilePath: ${{ parameters.config }}
-      EnvironmentUniqueName: ${{ parameters.environment.uniqueName }}
 
   # Execute dgtp
   - task: PowerShell@2
