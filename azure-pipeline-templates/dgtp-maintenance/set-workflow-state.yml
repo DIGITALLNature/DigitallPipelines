@@ -8,16 +8,6 @@
 parameters:
   # ----- Optional parameters -----
 
-  # Environment to deploy to
-  # Friendly name will be used to find variable groups and environments
-  # Unique Name will be used to find config file
-  # Example:
-  #   friendlyName: My Environment
-  #   uniqueName: myenvironment
-  - name: environment
-    displayName: Environment
-    type: object
-
   # Path to config to use
   # If not set will look for following paths:
   # - $(Build.Repository.LocalPath)/deployment-settings/set-workflow-state/
