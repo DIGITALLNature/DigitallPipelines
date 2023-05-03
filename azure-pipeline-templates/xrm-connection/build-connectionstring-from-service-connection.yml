@@ -77,7 +77,7 @@ steps:
       targetType: 'inline'
       script: |
         $Debug = $env:Debug
-        $PowerPlatformConnectionString = env:PowerPlatformConnectionString
+        $PowerPlatformConnectionString = $env:PowerPlatformConnectionString
         $OutputVariableName = $env:OutputVariableName
         $ServiceConnectionType = $env:ServiceConnectionType
 
