@@ -75,7 +75,7 @@ steps:
           Write-Host "##[debug]ConfigFilePath=$ConfigFilePath"
         }
 
-        dgtp maintenance workflowstate --config '$ConfigFilePath'
+        dgtp maintenance workflowstate --config "$ConfigFilePath"
     env:
       Debug: $(System.Debug)
       dgtp:xrm:connection: $(dgtp:xrm:connection)
