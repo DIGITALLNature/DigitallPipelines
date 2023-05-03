@@ -57,6 +57,39 @@ parameters:
     default: PowerPlatformSPN
 
 steps:
+  # Prepare environment url to be set
+  - task: PowerShell@2
+    displayName: Prepare power platform environment url
+    inputs:
+      targetType: 'inline'
+      script: |
+        $Debug = $env:Debug
+        $EnvironmentUrlParameter = "$($env:EnvironmentUrlParameter)"
+        $EnvironmentUrlBuildTools = "$($env:BuildTools.EnvironmentUrl)"
+        $EnvironmentUrlPowerPlatform = "$($env:PowerPlatformUrl)"
+
+        if ($Debug -eq $True) {
+          Write-Host "##[debug]EnvironmentUrlParameter=$EnvironmentUrlParameter"
+          Write-Host "##[debug]EnvironmentUrlBuildTools=$EnvironmentUrlBuildTools"
+          Write-Host "##[debug]EnvironmentUrlPowerPlatform=$EnvironmentUrlPowerPlatform"
+        }
+
+        $EnvironmentUrl = "$EnvironmentUrlParameter"
+        if ($EnvironmentUrl -eq "") {
+          if ($EnvironmentUrlBuildTools -ne "") {
+            $EnvironmentUrl = $EnvironmentUrlBuildTools
+          } elseif ($EnvironmentUrlPowerPlatform -ne "") {
+            $EnvironmentUrl = $EnvironmentUrlPowerPlatform
+          }
+        }
+
+        Write-Host "##[debug]Using environment: $EnvironmentUrl"
+        Write-Host "##vso[task.setvariable variable=BuildTools.EnvironmentUrl]$EnvironmentUrl"
+    env:
+      Debug: $(System.Debug)
+      EnvironmentUrlParameter: ${{ parameters.url }}
+      PowerPlatformUrl: $(PowerPlatformUrl)
+
   # Extract connection details from service connection
   - task: PowerPlatformSetConnectionVariables@2
     name: ${{ parameters.connectionTaskName }}

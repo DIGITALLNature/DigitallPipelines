@@ -8,6 +8,16 @@
 parameters:
   # ----- Optional parameters -----
 
+  # Environment to deploy to
+  # Friendly name will be used to find variable groups and environments
+  # Unique Name will be used to find config file
+  # Example:
+  #   friendlyName: My Environment
+  #   uniqueName: myenvironment
+  - name: environment
+    displayName: Environment
+    type: object
+
   # Path to config to use
   # If not set will look for following paths:
   # - $(Build.Repository.LocalPath)/deployment-settings/set-workflow-state/
@@ -28,9 +38,11 @@ steps:
       script: |
         $Debug = $env:Debug
         $ConfigFilePath = $env:ConfigFilePath
+        $EnvironmentUniqueName = $env:EnvironmentUniqueName
 
         if ($Debug -eq $True) {
           Write-Host "##[debug]ConfigFilePath=$ConfigFilePath"
+          Write-Host "##[debug]EnvironmentUniqueName=$EnvironmentUniqueName"
         }
 
         if ("$ConfigFilePath" -ne "") {
@@ -58,6 +70,7 @@ steps:
     env:
       Debug: $(System.Debug)
       ConfigFilePath: ${{ parameters.config }}
+      EnvironmentUniqueName: ${{ parameters.environment.uniqueName }}
 
   # Execute dgtp
   - task: PowerShell@2
@@ -70,8 +83,7 @@ steps:
         $ConfigFilePath = $env:ConfigFilePath
 
         if ($Debug -eq $True) {
-          $ConnectionDebug = $env:dgtp:xrm:connection -Split ";"
-          $ConnectionDebug
+          Write-Host "##[debug]ConfigFilePath=$ConfigFilePath"
         }
 
         dgtp maintenance workflowstate --config '$ConfigFilePath'
