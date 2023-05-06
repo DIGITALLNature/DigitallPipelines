@@ -38,7 +38,6 @@ parameters:
   # ----- Optional feature parameters -----
 
   # Force import of solutions with same or lower version
-  # The system won't apply the import but will apply deployment settings
   - name: forceImport
     displayName: Force import of solutions with same or lower version
     type: boolean
@@ -66,19 +65,20 @@ stages:
 
       # TODO: Add job for solution checker etc.
 
-  # Deploy solutions in separate stage
+  # Deploy solutions in separate stage for each environment
   - ${{ each environment in parameters.environments }}:
     - stage: deploy_${{ environment.uniqueName }}
       displayName: Deploy ${{ environment.friendlyName }}
 
       variables:
+        # If we have variables as parameter take them over default
         - ${{ if ne(environment.variables, '') }}:
           - ${{ environment.variables }}
         - ${{ else }}:
           - group: Power Platform Environment ${{ environment.friendlyName }}
 
       jobs:
-        # Deploy solution to each environment in separate job
+        # Deploy solution to each environment in deployment job
         - template: ../pp-solution-import/import-deployment.yml
           parameters:
             solutionList: ${{ parameters.solutionList }}
