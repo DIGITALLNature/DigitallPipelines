@@ -89,8 +89,7 @@ stages:
 
       variables:
         - ${{ if ne(environment.variables, '') }}:
-          - ${{ each variable in environment.variables }}:
-            - ${{ variable.key }}: ${{ variable.value }}
+          - ${{ environment.variables }}
         - ${{ else }}:
           - group: Power Platform Environment ${{ environment.friendlyName }}
 
