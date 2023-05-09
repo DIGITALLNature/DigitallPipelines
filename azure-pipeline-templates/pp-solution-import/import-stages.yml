@@ -35,11 +35,6 @@ parameters:
     displayName: Environments
     type: object
 
-  # Service connection to the target environment
-  - name: serviceConnection
-    displayName: Service Connection
-    type: string
-
   # ----- Optional feature parameters -----
 
   # Force import of solutions with same or lower version
@@ -48,17 +43,6 @@ parameters:
     displayName: Force import of solutions with same or lower version
     type: boolean
     default: false
-
-  # ----- Optional predefined parameters -----
-
-  # Type of service connection
-  - name: serviceConnectionType
-    displayName: Service connection type
-    type: string
-    values:
-      - PowerPlatformSPN
-      - PowerPlatformEnvironment
-    default: PowerPlatformSPN
 
 stages:
   # Prepare solutions in separate stage
@@ -100,8 +84,8 @@ stages:
             solutionList: ${{ parameters.solutionList }}
             solutionListReverse: ${{ parameters.solutionListReverse }}
             environment: ${{ environment }}
-            serviceConnection: ${{ parameters.serviceConnection }}
-            serviceConnectionType: ${{ parameters.serviceConnectionType }}
+            serviceConnection: ${{ environment.serviceConnection }}
+            serviceConnectionType: ${{ environment.serviceConnectionType }}
             forceImport: ${{ parameters.forceImport }}
             ${{ if ne(environment.devOpsEnvironment, '') }}:
               devOpsEnvironment: ${{ environment.devOpsEnvironment }}
@@ -120,8 +104,8 @@ stages:
             - template: ../xrm-connection/build-connectionstring-from-service-connection.yml@pipelinetemplates
               parameters:
                 outputVariableName: dgtp:xrm:connection
-                serviceConnection: ${{ parameters.serviceConnection }}
-                serviceConnectionType: ${{ parameters.serviceConnectionType }}
+                serviceConnection: ${{ environment.serviceConnection }}
+                serviceConnectionType: ${{ environment.serviceConnectionType }}
 
             # Update flow states
             - template: ../dgtp-maintenance/set-workflow-state.yml
