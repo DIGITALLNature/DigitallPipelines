@@ -95,9 +95,10 @@ jobs:
 
   # Deployment job for import
   - deployment: deploy_config
-    displayName: Deploy Configuration Data
+    displayName: Import Configuration Data
 
     dependsOn: backup_config
+    condition: in(dependencies.backup_config.result, 'Succeeded', 'SucceededWithIssues', 'Skipped')
 
     environment: ${{ parameters.devOpsEnvironment }}
 
