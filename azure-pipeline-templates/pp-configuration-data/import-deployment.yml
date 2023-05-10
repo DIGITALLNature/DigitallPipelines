@@ -117,6 +117,9 @@ jobs:
             - task: PowerPlatformImportData@2
               inputs:
                 authenticationType: ${{ parameters.serviceConnectionType }}
-                PowerPlatformEnvironment: ${{ parameters.serviceConnection }}
+                ${{ if eq(parameters.serviceConnectionType, 'PowerPlatformEnvironment') }}:
+                  PowerPlatformEnvironment: ${{ parameters.serviceConnection }}
+                ${{ else }}:
+                  PowerPlatformSPN: ${{ parameters.serviceConnection }}
                 Environment: $(PowerPlatformUrl)
                 DataFile: $(Pipeline.Workspace)/${{ parameters.dataFile }}
