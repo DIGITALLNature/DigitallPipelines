@@ -78,7 +78,10 @@ jobs:
         displayName: Export configuration data
         inputs:
           authenticationType: ${{ parameters.serviceConnectionType }}
-          PowerPlatformEnvironment: ${{ parameters.serviceConnection }}
+          ${{ if eq(parameters.serviceConnectionType, 'PowerPlatformEnvironment') }}:
+            PowerPlatformEnvironment: ${{ parameters.serviceConnection }}
+          ${{ else }}:
+            PowerPlatformSPN: ${{ parameters.serviceConnection }}
           Environment: $(PowerPlatformUrl)
           SchemaFile: ${{ parameters.schemaFile }}
           DataFile: ${{ parameters.backupDataFile }}
