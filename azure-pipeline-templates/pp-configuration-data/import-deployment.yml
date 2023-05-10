@@ -118,6 +118,7 @@ jobs:
 
             # Import data
             - task: PowerPlatformImportData@2
+              displayName: Import data
               inputs:
                 authenticationType: ${{ parameters.serviceConnectionType }}
                 ${{ if eq(parameters.serviceConnectionType, 'PowerPlatformEnvironment') }}:
