@@ -96,7 +96,11 @@ jobs:
   # Deployment job for import
   - deployment: deploy_config
     displayName: Deploy Configuration Data
+
+    dependsOn: backup_config
+
     environment: ${{ parameters.devOpsEnvironment }}
+
     strategy:
       runOnce:
         deploy:
