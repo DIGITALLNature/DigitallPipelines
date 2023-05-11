@@ -70,6 +70,10 @@ stages:
     - stage: deploy_${{ environment.uniqueName }}
       displayName: Deploy ${{ environment.friendlyName }}
 
+      ${{ if ne(environment.dependsOn, '') }}:
+        dependsOn: 
+          - ${{ environment.dependsOn }}
+
       variables:
         # If we have variables as parameter take them over default
         - ${{ if ne(environment.variables, '') }}:

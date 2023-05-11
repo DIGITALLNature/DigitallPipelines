@@ -27,6 +27,12 @@ parameters:
     type: boolean
     default: false
 
+  # Add custom pipeline tag
+  - name: customTag
+    displayName: Custom pipeline tag
+    type: string
+    default: ''
+
   # ----- Optional predefined parameters -----
 
   # Create deployment settings for each solution
@@ -306,3 +312,11 @@ jobs:
           condition: and(succeeded(), eq(variables.localChanges, 'true'))
           tags:
             - Changes
+
+      # Add custom tags (could be used to trigger follow up pipelines)
+      - ${{ if ne(parameters.customTag, '') }}:
+        - template: ../az-pipeline/add-build-tags.yml
+          parameters:
+            displayName: Add custom pipeline tags
+            tags: 
+              - ${{ parameters.customTag }}
