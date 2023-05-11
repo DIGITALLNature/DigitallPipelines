@@ -71,7 +71,8 @@ stages:
       displayName: Deploy ${{ environment.friendlyName }}
 
       ${{ if ne(environment.dependsOn, '') }}:
-        dependsOn: ${{ environment.dependsOn }}
+        dependsOn: 
+          - ${{ environment.dependsOn }}
 
       variables:
         # If we have variables as parameter take them over default
