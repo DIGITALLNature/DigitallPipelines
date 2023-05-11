@@ -143,7 +143,7 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                Write-Host "IsUpToDate=$(SolutionConfig_DigitallSolutions_IsUpToDate)"
+                Write-Host "IsUpToDate=$(compareSolutionVersions_DigitallSolutions.SolutionConfig_DigitallSolutions_IsUpToDate)"
                 Write-Host "##vso[task.setvariable variable=IsUpToDate;isoutput=true]$(SolutionConfig_DigitallSolutions_IsUpToDate)"
 
   # Deployment stage
