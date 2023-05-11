@@ -75,7 +75,7 @@ stages:
           # Unpack solution concept artifact
           - task: PowerPlatformUnpackSolution@2
             inputs:
-              SolutionInputFile: $(Pipeline.Workspace)/$(ArtifactName)/DigitallSolutions.zip
+              SolutionInputFile: $(Pipeline.Workspace)/$(ArtifactNameDigitallSolutions.zip
               SolutionTargetFolder: $(Pipeline.Workspace)/$(ArtifactName)
               SolutionType: Managed
 
@@ -132,7 +132,7 @@ stages:
           # Compare solution concept version
           - template: ../pp-solution-version/compare-solution-version.yml
             parameters:
-              solution: )/DigitallSolutions
+              solution: DigitallSolutions
               sourceSolutionsPath: $(Build.ArtifactStagingDirectory)/local-solutions.json
               targetSolutionsPath: $(Pipeline.Workspace)/installed-solution-list/installed-solutions.json
 
