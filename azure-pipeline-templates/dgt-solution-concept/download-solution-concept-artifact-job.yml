@@ -19,7 +19,7 @@ parameters:
   - name: solutionConceptFileName
     displayName: Solution Details File Name
     type: string
-    default: dgt_solution_concept.zip
+    default: DigitallSolutions.zip
 
   # Artifact name to publish as
   - name: artifactName
