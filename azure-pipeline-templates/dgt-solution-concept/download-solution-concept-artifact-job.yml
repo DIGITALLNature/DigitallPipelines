@@ -13,7 +13,7 @@ parameters:
   - name: downloadUrl
     displayName: Download Url
     type: string
-    default: 'https://dev.azure.com/ec4u/94a5eaf5-392f-46af-85cf-33808e6852b5/_apis/git/repositories/3c74d78e-c39b-4f5b-ae3a-21c505d8d01a/items?path=/Managed/ec4u_solution_concept.zip'
+    default: 'https://github.com/DIGITALLNature/DigitallSolutions/releases/latest/download/DigitallSolutions.zip'
 
   # Name of the downloaded managed solution
   - name: solutionConceptFileName
