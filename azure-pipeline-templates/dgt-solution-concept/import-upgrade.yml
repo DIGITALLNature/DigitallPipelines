@@ -75,7 +75,7 @@ stages:
           # Unpack solution concept artifact
           - task: PowerPlatformUnpackSolution@2
             inputs:
-              SolutionInputFile: $(Pipeline.Workspace)/$(ArtifactName)/ec4u_solution_concept.zip
+              SolutionInputFile: $(Pipeline.Workspace)/$(ArtifactName)/dgt_solution_concept.zip
               SolutionTargetFolder: $(Pipeline.Workspace)/$(ArtifactName)
               SolutionType: Managed
 
@@ -132,7 +132,7 @@ stages:
           # Compare solution concept version
           - template: ../pp-solution-version/compare-solution-version.yml
             parameters:
-              solution: ec4u_solution_concept
+              solution: dgt_solution_concept
               sourceSolutionsPath: $(Build.ArtifactStagingDirectory)/local-solutions.json
               targetSolutionsPath: $(Pipeline.Workspace)/installed-solution-list/installed-solutions.json
 
@@ -143,8 +143,8 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                Write-Host "IsUpToDate=$(SolutionConfig_ec4u_solution_concept_IsUpToDate)"
-                Write-Host "##vso[task.setvariable variable=IsUpToDate;isoutput=true]$(SolutionConfig_ec4u_solution_concept_IsUpToDate)"
+                Write-Host "IsUpToDate=$(SolutionConfig_dgt_solution_concept_IsUpToDate)"
+                Write-Host "##vso[task.setvariable variable=IsUpToDate;isoutput=true]$(SolutionConfig_dgt_solution_concept_IsUpToDate)"
 
   # Deployment stage
   - stage:
@@ -157,8 +157,8 @@ stages:
       # Import solution concept
       - template: ../pp-solution-import/import-deployment.yml
         parameters:
-          solutionList: ec4u_solution_concept
-          solutionListReverse: ec4u_solution_concept
+          solutionList: dgt_solution_concept
+          solutionListReverse: dgt_solution_concept
           environment: ${{ parameters.environment }}
           serviceConnection: ${{ parameters.serviceConnection }}
           serviceConnectionType: ${{ parameters.serviceConnectionType }}
