@@ -75,7 +75,7 @@ stages:
           # Unpack solution concept artifact
           - task: PowerPlatformUnpackSolution@2
             inputs:
-              SolutionInputFile: $(Pipeline.Workspace)/$(ArtifactNameDigitallSolutions.zip
+              SolutionInputFile: $(Pipeline.Workspace)/$(ArtifactName)/DigitallSolutions.zip
               SolutionTargetFolder: $(Pipeline.Workspace)/$(ArtifactName)
               SolutionType: Managed
 
