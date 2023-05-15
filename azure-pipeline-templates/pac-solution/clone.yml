@@ -41,7 +41,7 @@ steps:
         }
 
         Write-Host "##[group]Cloning solution $SolutionUniqueName"
-        pac solution clone --name $SolutionUniqueName
+        pac solution clone --name $SolutionUniqueName --async --processCanvasApps
         Write-Host "##[endgroup]"
     env:
       Debug: $(System.Debug)
