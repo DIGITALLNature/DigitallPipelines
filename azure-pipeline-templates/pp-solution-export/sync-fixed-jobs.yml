@@ -299,9 +299,32 @@ jobs:
           artifactName: Export_Solution_Code
           targetPath: ${{ parameters.outputDirectory }}
 
+      # Check if deployment settings folder exists
+      - task: PowerShell@2
+        name: detectDeploymentSettings
+        displayName: Check if target path exists
+        inputs:
+          targetType: 'inline'
+          script: |
+            $Debug = $env:Debug
+            $OutputDirectory = $env:OutputDirectory
+
+            $DeploymentSettingsExist = Test-Path -Path "$OutputDirectory/deployment-settings"
+
+            if ($Debug -eq "true") {
+              Write-Host "OutputDirectory=$OutputDirectory"
+              Write-Host "DeploymentSettingsExist=$DeploymentSettingsExist"
+            }
+
+            Write-Host "##vso[task.setvariable variable=DeploymentSettingsExist;isoutput=true]$DeploymentSettingsExist"
+        env:
+          OutputDirectory: ${{ parameters.outputDirectory }}
+          Debug: $(System.Debug)
+
       # Publish artifact with deployment settings
       - task: PublishPipelineArtifact@1
         displayName: Publish deployment settings artifact
+        condition: eq(detectDeploymentSettings.DeploymentSettingsExist, 'true')
         inputs:
           artifactName: Export_Deployment_Settings
           targetPath: ${{ parameters.outputDirectory }}/deployment-settings
