@@ -97,7 +97,6 @@ steps:
         if ("${{ parameters.cloud }}" -ne "") { $parameter += "--cloud", "${{ parameters.cloud }}" }
         elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformCloud" -ne "`$`(PowerPlatformCloud)")) { $parameter += "--cloud", "$env:PowerPlatformCloud" }
 
-        $parameter
         & pac auth create @parameter
     env:
       PowerPlatformUrl: $(PowerPlatformUrl)
