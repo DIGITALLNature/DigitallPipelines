@@ -191,11 +191,11 @@ jobs:
                 )
               )
 
-        # Publish solution as artifact even if nothing has changed
+        # Publish solution as artifact
         - task: PublishPipelineArtifact@1
           displayName: Publish solution artifact
           inputs:
-            artifactName: ${{ solution }}
+            artifactName: Export_Solution_${{ solution }}
             targetPath: ${{ parameters.outputDirectory }}/${{ solution }}
 
   # Combine all solution jobs
@@ -237,7 +237,7 @@ jobs:
           displayName: '${{ solution }}: Copy files'
           condition: and(succeeded(), or(eq('${{ parameters.onlySyncUpdatedSolutions }}', 'false'), eq(variables.SolutionConfig_${{ solution }}_IsUpToDate, 'false')))
           inputs:
-            SourceFolder: $(Agent.TempDirectory)/solutionArtifacts/${{ solution }}
+            SourceFolder: $(Agent.TempDirectory)/solutionArtifacts/Export_Solution_${{ solution }}
             TargetFolder: ${{ parameters.outputDirectory }}/${{ solution }}
             CleanTargetFolder: true
 
@@ -291,6 +291,20 @@ jobs:
               Write-Host "##[debug]Tag with: $(Build.BuildNumber)"
               git tag -a $(Build.BuildNumber) -m "Push for build $(Build.BuildNumber)"
             }
+
+      # Publish artifact with solution code
+      - task: PublishPipelineArtifact@1
+        displayName: Publish solution code artifact
+        inputs:
+          artifactName: Export_Solution_Code
+          targetPath: ${{ parameters.outputDirectory }}
+
+      # Publish artifact with deployment settings
+      - task: PublishPipelineArtifact@1
+        displayName: Publish deployment settings artifact
+        inputs:
+          artifactName: Export_Deployment_Settings
+          targetPath: ${{ parameters.outputDirectory }}/deployment-settings
 
       # Push all changes
       - template: ../git/push.yml
