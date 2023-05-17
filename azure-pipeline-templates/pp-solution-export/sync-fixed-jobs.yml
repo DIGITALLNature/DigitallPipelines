@@ -309,7 +309,7 @@ jobs:
             $Debug = $env:Debug
             $OutputDirectory = $env:OutputDirectory
 
-            $DeploymentSettingsExist = Test-Path -Path "$OutputDirectory/deployment-settings"
+            $DeploymentSettingsExist = Test-Path -Path "$OutputDirectory/../deployment-settings"
 
             if ($Debug -eq "true") {
               Write-Host "OutputDirectory=$OutputDirectory"
@@ -324,10 +324,10 @@ jobs:
       # Publish artifact with deployment settings
       - task: PublishPipelineArtifact@1
         displayName: Publish deployment settings artifact
-        condition: eq(detectDeploymentSettings.DeploymentSettingsExist, 'true')
+        condition: eq(variables.detectDeploymentSettings.DeploymentSettingsExist, 'true')
         inputs:
           artifactName: Export_Deployment_Settings
-          targetPath: ${{ parameters.outputDirectory }}/deployment-settings
+          targetPath: ${{ parameters.outputDirectory }}/../deployment-settings
 
       # Push all changes
       - template: ../git/push.yml
