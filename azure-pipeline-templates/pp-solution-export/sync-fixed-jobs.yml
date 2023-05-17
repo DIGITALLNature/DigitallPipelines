@@ -296,7 +296,7 @@ jobs:
       - task: PublishPipelineArtifact@1
         displayName: Publish solution code artifact
         inputs:
-          artifactName: Export_Solution_Code
+          artifactName: Export_Solutions_Code
           targetPath: ${{ parameters.outputDirectory }}
 
       # Check if deployment settings folder exists
@@ -316,7 +316,7 @@ jobs:
               Write-Host "DeploymentSettingsExist=$DeploymentSettingsExist"
             }
 
-            Write-Host "##vso[task.setvariable variable=DeploymentSettingsExist;isoutput=true]$DeploymentSettingsExist"
+            Write-Host "##vso[task.setvariable variable=DeploymentSettingsExist]$DeploymentSettingsExist"
         env:
           OutputDirectory: ${{ parameters.outputDirectory }}
           Debug: $(System.Debug)
@@ -324,7 +324,7 @@ jobs:
       # Publish artifact with deployment settings
       - task: PublishPipelineArtifact@1
         displayName: Publish deployment settings artifact
-        condition: eq(variables.detectDeploymentSettings.DeploymentSettingsExist, 'true')
+        condition: eq(variables.DeploymentSettingsExist, 'true')
         inputs:
           artifactName: Export_Deployment_Settings
           targetPath: ${{ parameters.outputDirectory }}/../deployment-settings
