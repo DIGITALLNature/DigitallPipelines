@@ -36,12 +36,43 @@ parameters:
     type: string
     default: ''
 
+  # ----- Optional feature parameters -----
+
+  # Use solution code from artifact instead of version associated with pipeline commit
+  # > Used to run export and deployment in one pipeline without need to clone newest commit created by export pipeline
+  - name: solutionCodeArtifactName
+    displayName: Name of artifact containing solution code
+    type: string
+    default: ''
+
+  # Use deployment settings artifact instead of version associated with pipeline commit
+  - name: deploymentSettingsArtifactName
+    displayName: Name of artifact containing deployment settings
+    type: string
+    default: ''
+
 jobs:
   # Prepare solutions
   - job: prepare_${{ parameters.environment.uniqueName }}_solutions
     displayName: Prepare solutions ${{ parameters.environment.friendlyName }}
 
     steps:
+      # If we have solution code as artifact download this instead of sources
+      - ${{ if ne(parameters.solutionCodeArtifactName, '') }}:
+        - checkout: none
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            artifactName: ${{ parameters.solutionCodeArtifactName }}
+            targetPath: ${{ parameters.solutionFolder }}
+
+      # If we have deployment settings as artifact download this instead of sources
+      - ${{ if ne(parameters.deploymentSettingsArtifactName, '') }}:
+        - checkout: none
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            artifactName: ${{ parameters.deploymentSettingsArtifactName }}
+            targetPath: $(Build.Repository.LocalPath)/deployment-settings
+
       # Prepare each solution
       - ${{ each solution in split(parameters.solutionList, ',') }}:
         # Use dotnet 6

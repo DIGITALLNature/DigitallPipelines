@@ -50,6 +50,13 @@ parameters:
     type: string
     default: succeeded()
 
+  # Use solution code from artifact instead of version associated with pipeline commit
+  # > Used to run export and deployment in one pipeline without need to clone newest commit created by export pipeline
+  - name: solutionCodeArtifactName
+    displayName: Name of artifact containing solution code
+    type: string
+    default: ''
+
 jobs:
   # Generate solution list and publish as artifact
   - job: ${{ parameters.jobName }}
@@ -57,9 +64,13 @@ jobs:
     condition: ${{ parameters.condition }}
 
     steps:
-      # Clone current repository
-      - checkout: self
-        clean: true
+      # If we have solution code as artifact download this instead of sources
+      - ${{ if ne(parameters.solutionCodeArtifactName, '') }}:
+        - checkout: none
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            artifactName: ${{ parameters.solutionCodeArtifactName }}
+            targetPath: ${{ parameters.solutionFolder }}
 
       # Generate solution list
       - template: ../pp-solution-version/generate-local-solution-list.yml
