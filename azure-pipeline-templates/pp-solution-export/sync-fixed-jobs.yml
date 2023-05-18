@@ -68,6 +68,18 @@ parameters:
       - PowerPlatformEnvironment
     default: PowerPlatformSPN
 
+  # Name of artifact containing solution code
+  - name: solutionCodeArtifactName
+    displayName: Name of artifact containing solution code
+    type: string
+    default: Export_Solutions_Code
+
+  # Name of artifact containing deployment settings
+  - name: deploymentSettingsArtifactName
+    displayName: Name of artifact containing deployment settings
+    type: string
+    default: Export_Deployment_Settings
+
 jobs:
   # Publish customizations if requested
   - template: ../pac-solution/publish-job.yml
@@ -296,7 +308,7 @@ jobs:
       - task: PublishPipelineArtifact@1
         displayName: Publish solution code artifact
         inputs:
-          artifactName: Export_Solutions_Code
+          artifactName: ${{ parameters.solutionCodeArtifactName }}
           targetPath: ${{ parameters.outputDirectory }}
 
       # Check if deployment settings folder exists
@@ -326,7 +338,7 @@ jobs:
         displayName: Publish deployment settings artifact
         condition: eq(variables.DeploymentSettingsExist, 'true')
         inputs:
-          artifactName: Export_Deployment_Settings
+          artifactName: ${{ parameters.deploymentSettingsArtifactName }}
           targetPath: ${{ parameters.outputDirectory }}/../deployment-settings
 
       # Push all changes
