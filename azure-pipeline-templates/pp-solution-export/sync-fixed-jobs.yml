@@ -30,7 +30,7 @@ parameters:
   # Add custom pipeline tags
   - name: customTags
     displayName: Custom pipeline tags
-    type: stepList
+    type: object
     default: ''
 
   # ----- Optional predefined parameters -----

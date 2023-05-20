@@ -19,7 +19,7 @@ parameters:
   # Custom tags to tag pipeline with
   - name: customTags
     displayName: Custom tags
-    type: stepList
+    type: object
     default:
       - Environment_Development
 
