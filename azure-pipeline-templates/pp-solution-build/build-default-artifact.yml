@@ -18,6 +18,14 @@ parameters:
     displayName: Environment
     type: object
 
+  # ----- Optional feature parameters -----
+
+  # Name of triggering pipeline containing solution code and deployment settings artifact
+  - name: triggerPipeline
+    displayName: Name of triggering pipeline containing solution code and deployment settings artifact
+    type: string
+    default: ''
+
   # ----- Optional predefined parameters -----
 
   # Path to solutions folder
@@ -43,10 +51,11 @@ jobs:
 
     steps:
       # If we triggered from a pipeline use artifacts
-      - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
+      - ${{ if and(ne(parameters.triggerPipeline, ''), eq(variables['Build.Reason'], 'ResourceTrigger')) }}:
         - checkout: none
         - task: DownloadPipelineArtifact@2
           inputs:
+            pipeline: ${{ parameters.triggerPipeline }}
             patterns: |
               Export_Solutions_Code/**
               Export_Deployment_Settings/**

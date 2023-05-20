@@ -4,7 +4,7 @@
 # - Solutions are extracted in local directory subfolder
 
 parameters:
-  # ------ Optional predefined parameters ------
+  # ----- Optional predefined parameters -----
 
   # Directory of the solution folders
   - name: solutionDirectory
@@ -42,7 +42,15 @@ parameters:
     type: string
     default: local-solution-list
 
-  # ------ Optional general feature parameters ------
+  # ----- Optional feature parameters -----
+
+  # Name of triggering pipeline containing solution code and deployment settings artifact
+  - name: triggerPipeline
+    displayName: Name of triggering pipeline containing solution code and deployment settings artifact
+    type: string
+    default: ''
+
+  # ----- Optional general feature parameters -----
 
   # Option to overwrite the condition for this task
   - name: condition
@@ -65,10 +73,11 @@ jobs:
 
     steps:
       # If we triggered from a pipeline use the artifact
-      - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
+      - ${{ if and(ne(parameters.triggerPipeline, ''), eq(variables['Build.Reason'], 'ResourceTrigger')) }}:
         - checkout: none
         - task: DownloadPipelineArtifact@2
           inputs:
+            pipeline: ${{ parameters.triggerPipeline }}
             patterns: Export_Solutions_Code/**
             targetPath: ${{ parameters.solutionDirectory }}
 

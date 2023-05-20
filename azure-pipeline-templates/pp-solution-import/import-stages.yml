@@ -43,6 +43,12 @@ parameters:
     type: boolean
     default: false
 
+  # Name of triggering pipeline containing solution code and deployment settings artifact
+  - name: triggerPipeline
+    displayName: Name of triggering pipeline containing solution code and deployment settings artifact
+    type: string
+    default: ''
+
 stages:
   # Prepare solutions in separate stage
   - stage: prepare_solution_deployments
@@ -56,12 +62,14 @@ stages:
           parameters:
             solutionList: ${{ parameters.solutionList }}
             environment: ${{ environment }}
+            triggerPipeline: ${{ parameters.triggerPipeline }}
 
         # Generate list of local solutions
         - template: ../pp-solution-version/generate-local-solution-list-job.yml
           parameters:
             jobName: ${{ environment.uniqueName }}_GenerateLocalSolutionList
             artifactName: ${{ environment.uniqueName }}_SolutionList_Local
+            triggerPipeline: ${{ parameters.triggerPipeline }}
 
       # TODO: Add job for solution checker etc.
 
@@ -104,10 +112,11 @@ stages:
 
           steps:
             # If we triggered from a pipeline use the artifact
-            - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
+            - ${{ if and(ne(parameters.triggerPipeline, ''), eq(variables['Build.Reason'], 'ResourceTrigger')) }}:
               - checkout: none
               - task: DownloadPipelineArtifact@2
                 inputs:
+                  pipeline: ${{ parameters.triggerPipeline }}
                   patterns: Export_Deployment_Settings/**
                   targetPath: $(Build.Repository.LocalPath)/deployment-settings
 
