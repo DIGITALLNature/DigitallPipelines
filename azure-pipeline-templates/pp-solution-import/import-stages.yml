@@ -119,12 +119,12 @@ stages:
           dependsOn: deploy_${{  environment.uniqueName }}
 
           steps:
-            # If we have deployment settings as artifact download this instead of sources
-            - ${{ if ne(parameters.deploymentSettingsArtifactName, '') }}:
+            # If we triggered from a pipeline use the artifact
+            - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
               - checkout: none
               - task: DownloadPipelineArtifact@2
                 inputs:
-                  artifactName: ${{ parameters.deploymentSettingsArtifactName }}
+                  itemPattern: Export_Deployment_Settings/**
                   targetPath: $(Build.Repository.LocalPath)/deployment-settings
 
             # Prepare dgtp tooling
