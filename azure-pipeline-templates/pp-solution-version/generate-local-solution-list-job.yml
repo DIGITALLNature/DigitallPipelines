@@ -76,9 +76,13 @@ jobs:
       - ${{ if and(ne(parameters.triggerPipeline, ''), eq(variables['Build.Reason'], 'ResourceTrigger')) }}:
         - checkout: none
         - task: DownloadPipelineArtifact@2
+          displayName: Download solution code artifact
           inputs:
-            pipeline: ${{ parameters.triggerPipeline }}
-            patterns: Export_Solutions_Code/**
+            buildType: specific
+            project: $(System.TeamProjectId)
+            definition: ${{ parameters.triggerPipeline }}
+            specificBuildWithTriggering: true
+            artifactName:  Export_Solutions_Code
             targetPath: ${{ parameters.solutionDirectory }}
 
       # Generate solution list

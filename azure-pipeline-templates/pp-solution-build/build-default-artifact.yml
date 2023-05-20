@@ -52,13 +52,29 @@ jobs:
     steps:
       # If we triggered from a pipeline use artifacts
       - ${{ if and(ne(parameters.triggerPipeline, ''), eq(variables['Build.Reason'], 'ResourceTrigger')) }}:
+        # We can rely solely on artifacts no source required
         - checkout: none
+
+        # Download solutions source code from artifact
         - task: DownloadPipelineArtifact@2
+          displayName: Download solution code artifact
           inputs:
-            pipeline: ${{ parameters.triggerPipeline }}
-            patterns: |
-              Export_Solutions_Code/**
-              Export_Deployment_Settings/**
+            buildType: specific
+            project: $(System.TeamProjectId)
+            definition: ${{ parameters.triggerPipeline }}
+            specificBuildWithTriggering: true
+            artifactName:  Export_Solutions_Code
+            targetPath: ${{ parameters.solutionFolder }}
+
+        # Download deployment settings from artifact
+        - task: DownloadPipelineArtifact@2
+          displayName: Download solution code artifact
+          inputs:
+            buildType: specific
+            project: $(System.TeamProjectId)
+            definition: ${{ parameters.triggerPipeline }}
+            specificBuildWithTriggering: true
+            artifactName:  Export_Deployment_Settings
             targetPath: ${{ parameters.solutionFolder }}
 
       # Prepare each solution

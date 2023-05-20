@@ -113,12 +113,19 @@ stages:
           steps:
             # If we triggered from a pipeline use the artifact
             - ${{ if and(ne(parameters.triggerPipeline, ''), eq(variables['Build.Reason'], 'ResourceTrigger')) }}:
+              # We can rely solely on artifacts no source required
               - checkout: none
+
+              # Download deployment settings from artifact
               - task: DownloadPipelineArtifact@2
+                displayName: Download solution code artifact
                 inputs:
-                  pipeline: ${{ parameters.triggerPipeline }}
-                  patterns: Export_Deployment_Settings/**
-                  targetPath: $(Build.Repository.LocalPath)/deployment-settings
+                  buildType: specific
+                  project: $(System.TeamProjectId)
+                  definition: ${{ parameters.triggerPipeline }}
+                  specificBuildWithTriggering: true
+                  artifactName:  Export_Deployment_Settings
+                  targetPath: ${{ parameters.solutionFolder }}
 
             # Prepare dgtp tooling
             - template: ../dgtp/install.yml
