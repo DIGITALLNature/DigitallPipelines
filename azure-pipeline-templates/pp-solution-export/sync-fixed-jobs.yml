@@ -363,7 +363,7 @@ jobs:
             - Changes
 
       # Add custom tags (could be used to trigger follow up pipelines)
-      - ${{ if ne(parameters.customTag, '') }}:
+      - ${{ if ne(parameters.customTags, '') }}:
         - template: ../az-pipeline/add-build-tags.yml
           parameters:
             displayName: Add custom pipeline tags
