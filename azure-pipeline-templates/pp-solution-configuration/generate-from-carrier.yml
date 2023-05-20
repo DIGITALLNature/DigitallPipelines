@@ -16,11 +16,12 @@ parameters:
     type: string
     default: '$(Build.Repository.LocalPath)/deployment-settings/solution-configuration/solution-configuration.yml'
 
-  # Environment name to use for pipeline tags
-  - name: environmentName
-    displayName: Environment Name
-    type: string
-    default: 'Development'
+  # Custom tags to tag pipeline with
+  - name: customTags
+    displayName: Custom tags
+    type: stepList
+    default:
+      - Environment_Development
 
   # ----- Optional parameters -----
 
@@ -66,8 +67,7 @@ steps:
   - template: ../az-pipeline/add-build-tags.yml
     parameters:
       displayName: Add solution configuration tags
-      tags:
-        - Environment_${{ parameters.environmentName }}
+      tags: ${{ parameters.customTags }}
 
   # Add pipeline tag for changes
   - template: ../az-pipeline/add-build-tags.yml
