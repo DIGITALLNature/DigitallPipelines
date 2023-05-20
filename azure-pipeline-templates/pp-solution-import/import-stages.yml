@@ -104,7 +104,8 @@ stages:
             solutionListReverse: ${{ parameters.solutionListReverse }}
             environment: ${{ environment }}
             serviceConnection: ${{ environment.serviceConnection }}
-            serviceConnectionType: ${{ environment.serviceConnectionType }}
+            ${{ if ne(environment.serviceConnectionType, '') }}:
+              serviceConnectionType: ${{ environment.serviceConnectionType }}
             forceImport: ${{ parameters.forceImport }}
             ${{ if ne(environment.devOpsEnvironment, '') }}:
               devOpsEnvironment: ${{ environment.devOpsEnvironment }}
@@ -132,7 +133,8 @@ stages:
               parameters:
                 outputVariableName: dgtp:xrm:connection
                 serviceConnection: ${{ environment.serviceConnection }}
-                serviceConnectionType: ${{ environment.serviceConnectionType }}
+                ${{ if ne(environment.serviceConnectionType, '') }}:
+                  serviceConnectionType: ${{ environment.serviceConnectionType }}
 
             # Update flow states
             - template: ../dgtp-maintenance/set-workflow-state.yml
