@@ -65,12 +65,11 @@ jobs:
 
     steps:
       # If we triggered from a pipeline use the artifact
-      - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
-        - checkout: none
-        - task: DownloadPipelineArtifact@2
-          inputs:
-            itemPattern: Export_Solutions_Code/**
-            targetPath: ${{ parameters.solutionFolder }}
+      - checkout: none
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          itemPattern: Export_Solutions_Code/**
+          targetPath: ${{ parameters.solutionFolder }}
 
       # Generate solution list
       - template: ../pp-solution-version/generate-local-solution-list.yml
