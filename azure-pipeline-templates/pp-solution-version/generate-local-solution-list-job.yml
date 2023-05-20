@@ -70,7 +70,7 @@ jobs:
         - task: DownloadPipelineArtifact@2
           inputs:
             itemPattern: Export_Solutions_Code/**
-            targetPath: ${{ parameters.solutionFolder }}
+            targetPath: ${{ parameters.solutionDirectory }}
 
       # Generate solution list
       - template: ../pp-solution-version/generate-local-solution-list.yml

@@ -36,21 +36,6 @@ parameters:
     type: string
     default: ''
 
-  # ----- Optional feature parameters -----
-
-  # Use solution code from artifact instead of version associated with pipeline commit
-  # > Used to run export and deployment in one pipeline without need to clone newest commit created by export pipeline
-  - name: solutionCodeArtifactName
-    displayName: Name of artifact containing solution code
-    type: string
-    default: ''
-
-  # Use deployment settings artifact instead of version associated with pipeline commit
-  - name: deploymentSettingsArtifactName
-    displayName: Name of artifact containing deployment settings
-    type: string
-    default: ''
-
 jobs:
   # Prepare solutions
   - job: prepare_${{ parameters.environment.uniqueName }}_solutions
