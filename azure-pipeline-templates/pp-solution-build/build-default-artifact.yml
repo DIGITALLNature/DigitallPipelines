@@ -57,20 +57,16 @@ jobs:
     displayName: Prepare solutions ${{ parameters.environment.friendlyName }}
 
     steps:
-      # If we have solution code as artifact download this instead of sources
-      - ${{ if ne(parameters.solutionCodeArtifactName, '') }}:
+      # If we triggered from a pipeline use artifacts
+      - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
         - checkout: none
         - task: DownloadPipelineArtifact@2
           inputs:
-            artifactName: ${{ parameters.solutionCodeArtifactName }}
+            itemPattern: Export_Solutions_Code/**
             targetPath: ${{ parameters.solutionFolder }}
-
-      # If we have deployment settings as artifact download this instead of sources
-      - ${{ if ne(parameters.deploymentSettingsArtifactName, '') }}:
-        - checkout: none
         - task: DownloadPipelineArtifact@2
           inputs:
-            artifactName: ${{ parameters.deploymentSettingsArtifactName }}
+            itemPattern: Export_Deployment_Settings/**
             targetPath: $(Build.Repository.LocalPath)/deployment-settings
 
       # Prepare each solution
