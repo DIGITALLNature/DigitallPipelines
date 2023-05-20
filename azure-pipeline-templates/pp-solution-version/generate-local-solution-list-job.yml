@@ -64,12 +64,12 @@ jobs:
     condition: ${{ parameters.condition }}
 
     steps:
-      # If we triggered from a pipeline use the artifact
-      - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
+      # If we have solution code as artifact download this instead of sources
+      - ${{ if ne(parameters.solutionCodeArtifactName, '') }}:
         - checkout: none
         - task: DownloadPipelineArtifact@2
           inputs:
-            itemPattern: Export_Solutions_Code/**
+            artifactName: ${{ parameters.solutionCodeArtifactName }}
             targetPath: ${{ parameters.solutionFolder }}
 
       # Generate solution list
