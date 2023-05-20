@@ -47,12 +47,10 @@ jobs:
         - checkout: none
         - task: DownloadPipelineArtifact@2
           inputs:
-            itemPattern: Export_Solutions_Code/**
+            patterns: |
+              Export_Solutions_Code/**
+              Export_Deployment_Settings/**
             targetPath: ${{ parameters.solutionFolder }}
-        - task: DownloadPipelineArtifact@2
-          inputs:
-            itemPattern: Export_Deployment_Settings/**
-            targetPath: $(Build.Repository.LocalPath)/deployment-settings
 
       # Prepare each solution
       - ${{ each solution in split(parameters.solutionList, ',') }}:

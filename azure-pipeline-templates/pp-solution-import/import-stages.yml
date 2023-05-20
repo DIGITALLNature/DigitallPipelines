@@ -108,7 +108,7 @@ stages:
               - checkout: none
               - task: DownloadPipelineArtifact@2
                 inputs:
-                  itemPattern: Export_Deployment_Settings/**
+                  patterns: Export_Deployment_Settings/**
                   targetPath: $(Build.Repository.LocalPath)/deployment-settings
 
             # Prepare dgtp tooling

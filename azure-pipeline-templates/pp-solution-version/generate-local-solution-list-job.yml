@@ -69,7 +69,7 @@ jobs:
         - checkout: none
         - task: DownloadPipelineArtifact@2
           inputs:
-            itemPattern: Export_Solutions_Code/**
+            patterns: Export_Solutions_Code/**
             targetPath: ${{ parameters.solutionDirectory }}
 
       # Generate solution list
