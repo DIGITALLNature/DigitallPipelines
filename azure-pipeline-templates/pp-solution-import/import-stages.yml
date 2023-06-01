@@ -125,6 +125,7 @@ stages:
                   definition: ${{ parameters.triggerPipeline }}
                   specificBuildWithTriggering: true
                   artifactName:  Export_Deployment_Settings
+                  itemPattern: '**/'
 
             # Prepare dgtp tooling
             - template: ../dgtp/install.yml
