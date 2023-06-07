@@ -267,7 +267,7 @@ jobs:
                 artifactName: ${{ parameters.environment.uniqueName }}_Solutions_RollbackInstructions
                 targetPath: $(Build.ArtifactStagingDirectory)/rollback-instructions
 
-        ${{ if eq(parameters.rollback, 'true') }}:
+        ${{ if eq(parameters.rollbackOnFailure, 'true') }}:
           on:
             failure:
               steps:
