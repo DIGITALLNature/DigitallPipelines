@@ -126,6 +126,7 @@ stages:
                   specificBuildWithTriggering: true
                   artifactName:  Export_Deployment_Settings
                   itemPattern: '**/'
+                  targetPath: $(Build.Repository.LocalPath)
 
             # Prepare dgtp tooling
             - template: ../dgtp/install.yml
