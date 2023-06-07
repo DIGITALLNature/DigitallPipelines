@@ -106,6 +106,9 @@ jobs:
       - generateLocalSolutionList
       - generateInstalledSolutionList
     steps:
+      # No sources required
+      - checkout: none
+
       # Load local solution versions
       - task: DownloadPipelineArtifact@2
         displayName: Download local solution info
