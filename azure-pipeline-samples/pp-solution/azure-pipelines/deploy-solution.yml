@@ -11,7 +11,8 @@ resources:
     - repository: pipelinetemplates
       type: github
       name: DIGITALLNature/DigitallPipelines
-      endpoint: DIGITALL Pipelines Service Connection
+      endpoint: DIGITALL Pipelines Service Connection # TODO: Replace with your endpoint connection name
+      ref: refs/heads/feature/chaining # ! Replace for sample
 
       # By default the default branch is used. If this is not the same default between projects
       # (for most it is main, but for some it still is master) or a different one should be
@@ -19,52 +20,48 @@ resources:
       # ref: refs/heads/preview
       # ref: refs/heads/master
 
+  pipelines:
+    # Add a reference to the pipeline exporting the solutions
+    # Runs whenever the export solutions ran
+    # > This requires the export solutions to be configured with matching name and tags
+    - pipeline: export-solution-configuration
+      source: Export solutions # TODO: Replace with your pipeline name
+      trigger:
+        tags: # TODO: Replace with your tag names
+          - Environment_Development
+          - Trigger_Release
+
 # By default use an ubuntu image
 pool:
   vmImage: ubuntu-latest
 
-# Use default variable groups (see /docs/variable-groups.md) namely the variables:
-# - PowerPlatformServiceConnectionName
-# - SolutionConfigList
-# - SolutionConfigListReverse
+# Use existing variable template
 variables:
-  - group: Power Platform Deployment Connection
-  - template: ../deployment-settings/solution-configuration/solution-configuration.yml
+  - template: ../deployment-settings/solution-configuration/solution-configuration.yml # TODO: Replace with your solution configuration
 
 # Extends from pipeline template that imports in stages
 extends:
   template: azure-pipeline-templates/pp-solution-import/import-stages.yml@pipelinetemplates
   parameters:
-    serviceConnection: $(PowerPlatformServiceConnectionName)
     solutionList: ${{ variables.SolutionConfigList }}
     solutionListReverse: ${{ variables.SolutionConfigListReverse }}
+    triggerPipeline: Export solutions # TODO: Replace with your pipeline name
 
     # List of environments and information about them
     # Every environment will become its own stage in the pipeline
-    # - friendlyName: Used for display names and finding default variable group and environment names
-    # - uniqueName: Used for job and artifact names as well as configuration files
-    # - variables: List of variables to be used for the environment
-    #   > This is optional. If not set will use the variables from:
-    #   > group: Power Platform Environment [friendlyName]
-    # - devOpsEnvironment: Name of the environment in DevOps
-    #   > This is optional. If not set will use the environment name:
-    #   > Power Platform Environment [friendlyName]
     environments:
 
-      # Sample (simplest) configuration for a sit environment
-      - friendlyName: System Integration Testing
-        uniqueName: sit
-
-      # Sample configuration for a uat environment
-      # We override the default variable group, because the variable group was name using short name
-      - friendlyName: User Acceptance Testing
-        uniqueName: uat
+      # Sample configuration for a test environment
+      # TODO: Repeat for needed additional environments
+      - friendlyName: Test
+        uniqueName: test
+        serviceConnection: Power Platform Service Connection Test # TODO: Replace with your service connection name
         variables:
-          - group: Power Platform Environment UAT
+          - group: Power Platform Environment Test # TODO: Replace with your variable group name
 
       # Sample configuration for a prod environment
-      # We override the default environment name, because the environment was named after system name
-      #   so that it is easier to understand for approver
+      # TODO: Repeat or remove as needed
       - friendlyName: Production
         uniqueName: prod
-        devOpsEnvironment: Power Platform Environment PROD
+        serviceConnection: Power Platform Service Connection Production # TODO: Replace with your service connection name
+        devOpsEnvironment: Power Platform Environment Production # TODO: Replace with your variable group name
