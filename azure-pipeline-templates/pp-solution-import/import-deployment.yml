@@ -114,10 +114,14 @@ jobs:
                 targetType: 'inline'
                 workingDirectory: $(Pipeline.Workspace)
                 script: |
+                  $WorkingDirectory = $env:WorkingDirectory
+
                   $DeploymentSettingsFileExist = Test-Path -Path "env-conn-settings.json"
 
                   Write-Host "##vso[task.setvariable variable=DeploymentSettingsFileExist;isoutput=true]$DeploymentSettingsFileExist"
-                  Write-Host "##vso[task.setvariable variable=DeploymentSettingsFile;isoutput=true]env-conn-settings.json"
+                  Write-Host "##vso[task.setvariable variable=DeploymentSettingsFile;isoutput=true]$WorkingDirectory/env-conn-settings.json"
+              env:
+                WorkingDirectory: $(Pipeline.Workspace)
 
             # Install Power Platform CLI
             - template: ../pac/install.yml
