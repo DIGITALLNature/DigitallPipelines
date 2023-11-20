@@ -54,3 +54,4 @@ extends:
       - Environment_Development # TODO: Replace with your custom tags
       - ${{ if eq(parameters.triggerExport, true) }}:
         - Trigger_Export
+    triggerExport: parameters.triggerExport
