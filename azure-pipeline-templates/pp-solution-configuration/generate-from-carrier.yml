@@ -25,7 +25,7 @@ parameters:
 
   - name: triggerExport
     displayName: Trigger Export
-    type: boolean
+    type: string
     default: true
 
   # ----- Optional parameters -----
@@ -41,9 +41,9 @@ parameters:
 
 variables:
   - name: shouldTriggerExport
-    ${{ if eq(parameters.triggerExport, true)}}:
+    ${{ if eq(parameters.triggerExport, 'true')}}:
       value: "Update solution carriers"
-    ${{ if eq(parameters.triggerExport, false)}}:
+    ${{ if eq(parameters.triggerExport, 'false')}}:
       value: "Update solution carriers [skip ci]"
 
 steps:
