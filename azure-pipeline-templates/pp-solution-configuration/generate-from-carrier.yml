@@ -65,11 +65,12 @@ steps:
 
   # Stage, commit and push changes
   - template: ../git/quick-commit-push.yml
-    parameters:
     ${{ if eq(parameters.triggerExport, 'true')}}:
-      commitMessage: "Update solution carriers"
+      parameters:
+        commitMessage: "Update solution carriers"
     ${{ if eq(parameters.triggerExport, 'false')}}:
-      commitMessage: "Update solution carriers [skip ci]"
+      parameters:
+        commitMessage: "Update solution carriers [skip ci]"
 
   # Add pipeline tags
   - template: ../az-pipeline/add-build-tags.yml
