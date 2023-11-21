@@ -39,13 +39,6 @@ parameters:
       - PowerPlatformEnvironment
     default: PowerPlatformSPN
 
-variables:
-  - name: shouldTriggerExport
-    ${{ if eq(parameters.triggerExport, 'true')}}:
-      value: "Update solution carriers"
-    ${{ if eq(parameters.triggerExport, 'false')}}:
-      value: "Update solution carriers [skip ci]"
-
 steps:
   # Checkout repository
   - checkout: self
@@ -73,7 +66,10 @@ steps:
   # Stage, commit and push changes
   - template: ../git/quick-commit-push.yml
     parameters:
-      commitMessage: shouldTriggerExport
+    ${{ if eq(parameters.triggerExport, 'true')}}:
+      commitMessage: "Update solution carriers"
+    ${{ if eq(parameters.triggerExport, 'false')}}:
+      commitMessage: "Update solution carriers [skip ci]"
 
   # Add pipeline tags
   - template: ../az-pipeline/add-build-tags.yml
