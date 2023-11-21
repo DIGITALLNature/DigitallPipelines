@@ -67,6 +67,7 @@ steps:
   - template: ../git/quick-commit-push.yml
     parameters:
       branch: "update/usenewpipelinetemplates"
+      commitMessage: "Test ${{ parameters.triggerExport}}" 
     ${{ if eq(parameters.triggerExport, 'true')}}:
       commitMessage: "Update solution carriers"
     ${{ if eq(parameters.triggerExport, 'false')}}:
