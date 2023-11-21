@@ -71,7 +71,8 @@ steps:
     ${{ if eq(parameters.triggerExport, 'false')}}:
       parameters:
         commitMessage: "Update solution carriers [skip ci]"
-    branch: "update/usenewpipelinetemplates"
+    parameters:
+      branch: "update/usenewpipelinetemplates"
 
   # Add pipeline tags
   - template: ../az-pipeline/add-build-tags.yml
