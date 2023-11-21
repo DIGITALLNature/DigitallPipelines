@@ -23,8 +23,8 @@ parameters:
     default:
       - Environment_Development
 
-  - name: triggerSolutionExport
-    displayName: Trigger Solution Export
+  - name: triggerExport
+    displayName: Trigger export of solutions
     type: boolean
     default: true
 
@@ -67,9 +67,9 @@ steps:
   - template: ../git/quick-commit-push.yml
     parameters:
       branch: "update/usenewpipelinetemplates"
-      ${{ if eq(parameters.triggerSolutionExport, true) }}:
+      ${{ if eq(parameters.triggerExport, true) }}:
         commitMessage: "Update solution carriers"
-      ${{ if eq(parameters.triggerSolutionExport, false)  }}:
+      ${{ if eq(parameters.triggerExport, false) }}:
         commitMessage: "Update solution carriers [skip ci]"
 
   # Add pipeline tags
