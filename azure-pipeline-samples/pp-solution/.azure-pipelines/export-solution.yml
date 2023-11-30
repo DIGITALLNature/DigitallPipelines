@@ -8,7 +8,7 @@ trigger:
     - 'main'
   paths:
     include:
-    - .azure-pipelines/update-solution-configuration.yml
+    - deployment-settings/solution-configuration/solution-configuration.yml
 
 
 resources:
