@@ -23,10 +23,10 @@ parameters:
     default:
       - Environment_Development
 
-  - name: triggerExport
-    displayName: Trigger export of solutions
+  - name: skipCI
+    displayName: Commit can trigger CI
     type: boolean
-    default: true
+    default: false
 
   # ----- Optional parameters -----
 
@@ -67,9 +67,9 @@ steps:
   - template: ../git/quick-commit-push.yml
     parameters:
       branch: "update/usenewpipelinetemplates"
-      ${{ if eq(parameters.triggerExport, true) }}:
+      ${{ if eq(parameters.skipCI, false) }}:
         commitMessage: "Update solution carriers"
-      ${{ if eq(parameters.triggerExport, false) }}:
+      ${{ if eq(parameters.skipCI, true) }}:
         commitMessage: "Update solution carriers [skip ci]"
 
   # Add pipeline tags
