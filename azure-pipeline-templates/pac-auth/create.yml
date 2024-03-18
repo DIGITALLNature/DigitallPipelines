@@ -69,33 +69,147 @@ steps:
     inputs:
       targetType: inline
       script: |
+        $Debug = $env:Debug
         $parameter = @(
           "--name", "${{ parameters.name }}"
         )
 
-        if ("${{ parameters.url }}" -ne "") { $parameter += "--environment", "${{ parameters.url }}" }
-        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformUrl" -ne "`$`(PowerPlatformUrl)")) { $parameter += "--environment", "$env:PowerPlatformUrl" }
+        if ("${{ parameters.url }}" -ne "")
+        {
+          $parameter += "--environment", "${{ parameters.url }}"
 
-        if ("${{ parameters.username }}" -ne "") { $parameter += "--username", "${{ parameters.username }}" }
-        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformUsername" -ne "`$`(PowerPlatformUsername)")) { $parameter += "--username", "$env:PowerPlatformUsername" }
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]parameters.environment=${{ parameters.url }}"
+          }
+        }
+        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformUrl" -ne "`$`(PowerPlatformUrl)"))
+        {
+          $parameter += "--environment", "$env:PowerPlatformUrl"
 
-        if ("${{ parameters.password }}" -ne "") { $parameter += "--password", "${{ parameters.password }}" }
-        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformPassword" -ne "`$`(PowerPlatformPassword)")) { $parameter += "--password", "$env:PowerPlatformPassword" }
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]env.environment=$env:PowerPlatformUrl"
+          }
+        }
 
-        if ("${{ parameters.applicationId }}" -ne "") { $parameter += "--applicationId", "${{ parameters.applicationId }}" }
-        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformApplicationId" -ne "`$`(PowerPlatformApplicationId)")) { $parameter += "--applicationId", "$env:PowerPlatformApplicationId" }
+        if ("${{ parameters.username }}" -ne "")
+        {
+          $parameter += "--username", "${{ parameters.username }}"
 
-        if ("${{ parameters.clientSecret }}" -ne "") { $parameter += "--clientSecret", "${{ parameters.clientSecret }}" }
-        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformClientSecret" -ne "`$`(PowerPlatformClientSecret)")) { $parameter += "--clientSecret", "$env:PowerPlatformClientSecret" }
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]parameters.username=${{ parameters.username }}"
+          }
+        }
+        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformUsername" -ne "`$`(PowerPlatformUsername)"))
+        {
+          $parameter += "--username", "$env:PowerPlatformUsername"
 
-        if ("${{ parameters.tenant }}" -ne "") { $parameter += "--tenant", "${{ parameters.tenant }}" }
-        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformTenant" -ne "`$`(PowerPlatformTenant)")) { $parameter += "--tenant", "$env:PowerPlatformTenant" }
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]env.username=$env:PowerPlatformUsername"
+          }
+        }
 
-        if ("${{ parameters.cloud }}" -ne "") { $parameter += "--cloud", "${{ parameters.cloud }}" }
-        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformCloud" -ne "`$`(PowerPlatformCloud)")) { $parameter += "--cloud", "$env:PowerPlatformCloud" }
+        if ("${{ parameters.password }}" -ne "")
+        {
+          $parameter += "--password", "${{ parameters.password }}"
+
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]parameters.password=*****"
+          }
+        }
+        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformPassword" -ne "`$`(PowerPlatformPassword)"))
+        {
+          $parameter += "--password", "$env:PowerPlatformPassword"
+
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]env.password=*****"
+          }
+        }
+
+        if ("${{ parameters.applicationId }}" -ne "")
+        {
+          $parameter += "--applicationId", "${{ parameters.applicationId }}"
+
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]parameters.applicationId=${{ parameters.applicationId }}"
+          }
+        }
+        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformApplicationId" -ne "`$`(PowerPlatformApplicationId)"))
+        {
+          $parameter += "--applicationId", "$env:PowerPlatformApplicationId"
+
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]env.applicationId=$env:PowerPlatformApplicationId"
+          }
+        }
+
+        if ("${{ parameters.clientSecret }}" -ne "")
+        {
+          $parameter += "--clientSecret", "${{ parameters.clientSecret }}"
+
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]parameters.clientSecret=*****"
+          }
+        }
+        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformClientSecret" -ne "`$`(PowerPlatformClientSecret)"))
+        {
+          $parameter += "--clientSecret", "$env:PowerPlatformClientSecret"
+
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]env.clientSecret=*****"
+          }
+        }
+
+        if ("${{ parameters.tenant }}" -ne "")
+        {
+          $parameter += "--tenant", "${{ parameters.tenant }}"
+
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]parameters.tenant=${{ parameters.tenant }}"
+          }
+        }
+        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformTenant" -ne "`$`(PowerPlatformTenant)"))
+        {
+          $parameter += "--tenant", "$env:PowerPlatformTenant"
+
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]env.tenant=$env:PowerPlatformTenant"
+          }
+        }
+
+        if ("${{ parameters.cloud }}" -ne "")
+        {
+          $parameter += "--cloud", "${{ parameters.cloud }}"
+
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]parameters.cloud=${{ parameters.cloud }}"
+          }
+        }
+        elseif (($${{ parameters.ignoreEnvs }} -ne $True) -And ("$env:PowerPlatformCloud" -ne "`$`(PowerPlatformCloud)"))
+        {
+          $parameter += "--cloud", "$env:PowerPlatformCloud"
+
+          if ($Debug -eq $True)
+          {
+            Write-Host "##[debug]env.cloud=$env:PowerPlatformCloud"
+          }
+        }
 
         & pac auth create @parameter
     env:
+      Debug: $(System.Debug)
       PowerPlatformUrl: $(PowerPlatformUrl)
       PowerPlatformUsername: $(PowerPlatformUsername)
       PowerPlatformPassword: $(PowerPlatformPassword)
