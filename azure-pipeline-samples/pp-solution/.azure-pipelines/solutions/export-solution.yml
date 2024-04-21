@@ -65,7 +65,7 @@ parameters:
 # Use existing variable groups and templates
 variables:
   - group: Power Platform Environment Development
-  - template: ../deployment-settings/solution-configuration/solution-configuration.yml
+  - template: ../../deployment-settings/solution-configuration/solution-configuration.yml
 
 # Extend from pipeline template that generates the solution configuration
 extends:

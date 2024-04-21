@@ -36,7 +36,7 @@ pool:
 
 # Use existing variable template
 variables:
-  - template: ../deployment-settings/solution-configuration/solution-configuration.yml
+  - template: ../../deployment-settings/solution-configuration/solution-configuration.yml
 
 # Extends from pipeline template that imports in stages
 extends:
