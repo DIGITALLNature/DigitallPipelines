@@ -51,4 +51,4 @@ extends:
   template: azure-pipeline-templates/pp-solution-configuration/generate-from-carrier.yml@pipelinetemplates
   parameters:
     serviceConnection: Power Platform Service Connection Development
-    skipCI: parameters.skipExport
+    skipCI: ${{ parameters.skipExport }}
