@@ -58,4 +58,4 @@ steps:
       Debug: $(System.Debug)
       SolutionUniqueName: ${{ parameters.solutionUniqueName }}
       WorkingDirectory: ${{ parameters.outputDirectory }}
-      ProcessCanvasApps: $[ coalesce(variables.SolutionConfigProcessCanvasApps_Export, 'true') ]
+      ProcessCanvasApps: $(SolutionConfigProcessCanvasApps_Export)
