@@ -51,7 +51,7 @@ parameters:
 
   # Automatically roll back if import fails
   - name: rollbackOnFailure
-    displayName: Automatically roll back if import fails
+    displayName: Automatically roll back if import fails. Applies to all environments, but can be overriden on environment level.
     type: boolean
     default: true
 
@@ -123,7 +123,10 @@ stages:
               devOpsEnvironment: ${{ environment.devOpsEnvironment }}
             ${{ else }}:
               devOpsEnvironment: Power Platform Environment ${{ environment.friendlyName }}
-            rollbackOnFailure: ${{ parameters.rollbackOnFailure }}
+            ${{ if ne(environment.rollbackOnFailure, '') }}:
+              rollbackOnFailure: ${{ environment.rollbackOnFailure }}
+            ${{ else }}:
+              rollbackOnFailure: ${{ parameters.rollbackOnFailure }}
             continueOnDeploymentFailure: ${{ parameters.continueOnDeploymentFailure }}
 
         # Post deployment jobs
