@@ -1,3 +1,6 @@
+# Copyright (c) DIGITALL Nature. All rights reserved
+# DIGITALL Nature licenses this file to you under the Microsoft Public License.
+
 variables:
   SolutionConfigList: rollback_upgraded,rollback_upgrade_fail
   SolutionConfigListReverse: rollback_upgrade_fail,rollback_upgraded

@@ -1,3 +1,6 @@
+# Copyright (c) DIGITALL Nature. All rights reserved
+# DIGITALL Nature licenses this file to you under the Microsoft Public License.
+
 variables:
   SolutionConfigList: test_ci_pp_solution_import_rollback_update_Patch_1ed0b826,test_ci_pp_solution_import_rollback_update_fail
   SolutionConfigListReverse: test_ci_pp_solution_import_rollback_update_fail,test_ci_pp_solution_import_rollback_update_Patch_1ed0b826

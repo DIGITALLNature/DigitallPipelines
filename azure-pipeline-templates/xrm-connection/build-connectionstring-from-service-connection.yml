@@ -1,3 +1,6 @@
+# Copyright (c) DIGITALL Nature. All rights reserved
+# DIGITALL Nature licenses this file to you under the Microsoft Public License.
+
 # Create a connectionstring from an existing service connection
 #
 # While the service connection does have a default url this cannot be exposed and needs to be set manually if the connection

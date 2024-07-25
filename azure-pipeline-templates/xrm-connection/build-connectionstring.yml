@@ -1,3 +1,6 @@
+# Copyright (c) DIGITALL Nature. All rights reserved
+# DIGITALL Nature licenses this file to you under the Microsoft Public License.
+
 # Create a connectionstring from individual settings
 #
 # There are two different ways to configure what will be part of the connection string
