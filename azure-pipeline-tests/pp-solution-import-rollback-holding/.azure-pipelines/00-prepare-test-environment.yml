@@ -2,8 +2,9 @@
 # - Delete solutions on the test environment if they are installed
 # - Import solution in version 1.0.0.0 if not installed
 
-# No automated trigger
-trigger: none
+# Trigger on beta commit
+trigger:
+  - beta
 
 resources:
   repositories:

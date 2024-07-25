@@ -3,8 +3,9 @@
 # - Import base solution in version 1.0.0.0
 # - Import patch in version 1.0.1.0
 
-# No automated trigger
-trigger: none
+# Trigger on beta commit
+trigger:
+  - beta
 
 resources:
   repositories:
