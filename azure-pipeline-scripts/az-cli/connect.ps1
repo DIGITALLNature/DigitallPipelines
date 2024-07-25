@@ -1,3 +1,6 @@
+# Copyright (c) DIGITALL Nature. All rights reserved
+# DIGITALL Nature licenses this file to you under the Microsoft Public License.
+
 <#
     Tries to connect with an given subscription, account or tenant id (in that order)
     If none is provided an interactive login is started

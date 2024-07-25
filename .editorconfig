@@ -1,0 +1,24 @@
+# editorconfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Default settings:
+# A newline ending every file
+# Use 4 spaces as indentation
+[*]
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+# License header
+file_header_template = Copyright (c) DIGITALL Nature. All rights reserved\nDIGITALL Nature licenses this file to you under the Microsoft Public License.
+
+# PowerShell scripts
+[*.ps1]
+end_of_line = lf
+
+# Pipelines
+[*.yml]
+end_of_line = lf

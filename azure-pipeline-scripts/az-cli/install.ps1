@@ -1,3 +1,6 @@
+# Copyright (c) DIGITALL Nature. All rights reserved
+# DIGITALL Nature licenses this file to you under the Microsoft Public License.
+
 <#
     Tries to install azure cli and devops extension if not already installed
 #>
