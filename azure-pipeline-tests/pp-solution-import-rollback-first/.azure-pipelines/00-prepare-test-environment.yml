@@ -1,8 +1,9 @@
 # Part 00 of test scenario "Rollback first import"
 # Delete solutions on the test environment if they are installed
 
-# No automated trigger
-trigger: none
+# Trigger on beta commit
+trigger:
+  - beta
 
 resources:
   repositories:

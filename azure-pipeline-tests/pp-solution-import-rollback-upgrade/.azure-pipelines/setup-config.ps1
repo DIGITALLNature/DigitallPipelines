@@ -1,8 +1,5 @@
 return @{
-    AzSubscriptionId                = $ENV:AZURE_CLI_SUBSCRIPTTION_ID;
-    AzAccountName                   = $ENV:AZURE_CLI_ACCOUNT_NAME;
-    AzTenantId                      = $ENV:AZURE_CLI_TENANT_ID;
-
+    DevOpsPat                       = $ENV:DEVOPS_PAT
     DevOpsTenantId                  = $ENV:DEVOPS_TENANT_ID;
     DevOpsOrganization              = $ENV:DEVOPS_ORGANIZATION;
     DevOpsProjectName               = $ENV:DEVOPS_PROJECT_NAME;
@@ -65,7 +62,7 @@ return @{
     PipelineSource                  = @{
         RepositoryType                        = "github";
         RepositoryUrl                         = "https://github.com/DIGITALLNature/DIGITALLPipelines";
-        RepositoryBranch                      = "main";
+        RepositoryBranch                      = "beta";
         RepositoryGitHubServiceConnectionName = "(TEST CI) DIGITALL Pipelines Test";
     };
 }
