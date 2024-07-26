@@ -88,32 +88,46 @@ jobs:
           inputs:
             version: 8.x
 
-        # Build solution project
+        # Build solution project (managed)
+        # Use release configuration for managed solutions
+        # Assume managed unless explicitly stated otherwise
         - task: DotNetCoreCLI@2
-          displayName: '${{ solution }}: Build solution'
+          displayName: '${{ solution }}: Build managed solution'
+          condition: and(succeeded(), ne(variables['SolutionConfig_${{ solution }}_ImportManaged'], 'false'))
+          inputs:
+            command: build
+            projects: ${{ parameters.solutionFolder }}/${{ solution }}/${{ solution }}.cdsproj
+            workingDirectory: ${{ parameters.solutionFolder }}/${{ solution }}
+            arguments: '--configuration Release'
+
+        # Move managed solution output to artifact folder
+        # Output directory depends on build configuration (redirecting output on build did not work)
+        - task: CopyFiles@2
+          displayName: '${{ solution }}: Copy managed solution to artifact folder'
+          condition: and(succeeded(), ne(variables['SolutionConfig_${{ solution }}_ImportManaged'], 'false'))
+          inputs:
+            Contents: '**'
+            TargetFolder: $(Build.ArtifactStagingDirectory)
+            SourceFolder: ${{ parameters.solutionFolder }}/${{ solution }}/bin/Release
+
+        # Build solution project (unmanaged)
+        - task: DotNetCoreCLI@2
+          displayName: '${{ solution }}: Build unmanaged solution'
+          condition: and(succeeded(), eq(variables['SolutionConfig_${{ solution }}_ImportManaged'], 'false'))
           inputs:
             command: build
             projects: ${{ parameters.solutionFolder }}/${{ solution }}/${{ solution }}.cdsproj
             workingDirectory: ${{ parameters.solutionFolder }}/${{ solution }}
 
-            # Use release configuration for managed solutions
-            # Assume managed unless explicitly stated otherwise
-            ${{ if ne(variables[format('SolutionConfig{0}', 'List')], 'false') }}:
-              arguments: '--configuration Release'
-
-        # Move solution output to artifact folder
+        # Move unmanaged solution output to artifact folder
+        # Output directory depends on build configuration (redirecting output on build did not work)
         - task: CopyFiles@2
-          displayName: '${{ solution }}: Copy solution to artifact folder'
+          displayName: '${{ solution }}: Copy managed solution to artifact folder'
+          condition: and(succeeded(), ne(variables['SolutionConfig_${{ solution }}_ImportManaged'], 'false'))
           inputs:
             Contents: '**'
             TargetFolder: $(Build.ArtifactStagingDirectory)
-
-            # Output directory depends on build configuration (redirecting output on build did not work)
-            # Assume managed unless explicitly stated otherwise
-            ${{ if ne(variables[format('SolutionConfig_{0}_ImportManaged', solution)], 'false') }}:
-              SourceFolder: ${{ parameters.solutionFolder }}/${{ solution }}/bin/Release
-            ${{ else }}:
-              SourceFolder: ${{ parameters.solutionFolder }}/${{ solution }}/bin/Debug
+            SourceFolder: ${{ parameters.solutionFolder }}/${{ solution }}/bin/Debug
 
       # Search and copy deployment settings if exists
       - task: PowerShell@2
