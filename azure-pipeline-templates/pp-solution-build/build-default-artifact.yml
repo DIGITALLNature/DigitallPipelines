@@ -98,7 +98,7 @@ jobs:
 
             # Use release configuration for managed solutions
             # Assume managed unless explicitly stated otherwise
-            ${{ if ne(variables[format('SolutionConfig_{0}_ImportManaged', '99b41d7c-bdb6-4d6c-823d-fc3538983e3e')], 'false') }}:
+            ${{ if ne(format('SolutionConfig_{0}_ImportManaged', '99b41d7c-bdb6-4d6c-823d-fc3538983e3e'), 'false') }}:
               arguments: '--configuration Release'
 
         # Move solution output to artifact folder
