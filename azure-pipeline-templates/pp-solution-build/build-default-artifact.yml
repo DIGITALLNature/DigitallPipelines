@@ -123,7 +123,7 @@ jobs:
         # Output directory depends on build configuration (redirecting output on build did not work)
         - task: CopyFiles@2
           displayName: '${{ solution }}: Copy managed solution to artifact folder'
-          condition: and(succeeded(), ne(variables['SolutionConfig_${{ solution }}_ImportManaged'], 'false'))
+          condition: and(succeeded(), eq(variables['SolutionConfig_${{ solution }}_ImportManaged'], 'false'))
           inputs:
             Contents: '**'
             TargetFolder: $(Build.ArtifactStagingDirectory)
