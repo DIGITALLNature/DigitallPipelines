@@ -112,7 +112,7 @@ $PipelineConfig = @{
 
     PipelineSource                  = @{
         RepositoryType   = "tfsgit";
-        RepositoryUrl    = "$ENV:DEVOPS_ORGANIZATION/$ENV:DEVOPS_PROJECT_NAME/_git/Solutions";
+        RepositoryUrl    = "$ENV:DEVOPS_ORGANIZATION/$ENV:DEVOPS_PROJECT_NAME/_git/$ENV:DEVOPS_PROJECT_NAME";
         RepositoryBranch = "main";
     };
 }
