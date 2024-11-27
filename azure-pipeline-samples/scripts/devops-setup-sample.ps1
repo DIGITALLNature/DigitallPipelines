@@ -6,11 +6,11 @@ $DevOpsConfig = @{
     Repositories = @(
         @{
             Name = 'Serverside'
-            Template = 'https://digitallnature@dev.azure.com/digitallnature/Template%20Project/Serverside-Template'
+            Template = 'https://digitallnature@dev.azure.com/digitallnature/Template%20Project/_git/Serverside-Template'
         },
         @{
             Name = 'Clientside'
-            Template = 'https://digitallnature@dev.azure.com/digitallnature/Template%20Project/Clientside-Template'
+            Template = 'https://digitallnature@dev.azure.com/digitallnature/Template%20Project/_git/Clientside-Template'
         },
         @{
             Name = 'Documentation'
