@@ -1,7 +1,7 @@
 # Export solution from solution configuration to current repository
 # Runs on a nightly schedule but scheduled after solution configuration ran
 
-# No automated trigger and also no schedule since a pipeline trigger is used
+# Trigger the pipeline automatically only if the configuration changes
 trigger: 
   branches:
     include:
