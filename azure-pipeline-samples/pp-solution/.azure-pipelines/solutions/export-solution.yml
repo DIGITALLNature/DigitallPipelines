@@ -1,7 +1,9 @@
 # Export solution from solution configuration to current repository
 # Runs on a nightly schedule but scheduled after solution configuration ran
 
-# Trigger the pipeline automatically only if the configuration changes
+# Trigger the pipeline automatically if the solution configuration changes
+# > This happens if it is updated manually or the carrier changed 
+#   and the update solution configuration pipeline ran
 trigger: 
   branches:
     include:
