@@ -113,7 +113,7 @@ steps:
       SolutionUniqueName: ${{ parameters.solution }}
       SourceSolutionsPath: ${{ parameters.sourceSolutionsPath }}
       TargetSolutionsPath: ${{ parameters.targetSolutionsPath }}
-      ${{ if ne(variables[format('SolutionConfig_{0}_ImportManaged', solution)], 'false') }}:
+      ${{ if ne(variables[format('SolutionConfig_{0}_ImportManaged', parameters.solution)], 'false') }}:
         Managed: true
       ${{ else }}:
         Managed: false
