@@ -20,6 +20,7 @@ try {
 
     Write-Host "---------- Connect with Azure Cli ----------" -ForegroundColor $highlightColor
     . $PSScriptRoot/az-cli/connect.ps1 `
+        -AzureDevOpsPAT $DevOpsConfig.DevOpsPAT `
         -SubscriptionId $DevOpsConfig.AzSubscriptionId `
         -AccountName $DevOpsConfig.AzAccountName `
         -TenantId $DevOpsConfig.AzTenantId

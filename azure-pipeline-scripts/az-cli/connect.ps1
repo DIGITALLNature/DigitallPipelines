@@ -6,6 +6,9 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $false)]
+    [string]$AzureDevOpsPAT,
+
+    [Parameter(Mandatory = $false)]
     [string]$SubscriptionId,
 
     [Parameter(Mandatory = $false)]
@@ -15,7 +18,17 @@ param(
     [string]$TenantId
 )
 
-if ($null -ne $SubscriptionId -and "" -ne $SubscriptionId) {
+if ($null -ne $AzureDevOpsPAT -and "" -ne $AzureDevOpsPAT) {
+    Write-Debug "- Using Azure DevOps Personal Access Token"
+    $AzureDevOpsPAT | az devops login
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to login with PAT"
+    }
+
+    az account show --output table
+}
+elseif ($null -ne $SubscriptionId -and "" -ne $SubscriptionId) {
     Write-Debug "- Using subscription: $SubscriptionId"
     az account set --subscription $SubscriptionId
 
