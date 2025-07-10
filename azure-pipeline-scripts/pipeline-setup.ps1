@@ -22,7 +22,7 @@ try {
     . $PSScriptRoot/az-cli/install.ps1
 
     Write-Host "---------- Connect with Azure Cli ----------" -ForegroundColor $highlightColor
-    $PipelineConfig.DevOpsPat | az devops login
+    $PipelineConfig.DevOpsPAT | az devops login
 
     Write-Host "---------- Create GitHub Service Connections ----------" -ForegroundColor $highlightColor
     $GitHubServiceConnections = . $PSScriptRoot/az-devops/new-github-service-connection.ps1 `

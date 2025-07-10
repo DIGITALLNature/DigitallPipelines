@@ -1,5 +1,5 @@
 return @{
-    DevOpsPat                       = $ENV:DEVOPS_PAT
+    DevOpsPAT                       = $ENV:DEVOPS_PAT
     DevOpsTenantId                  = $ENV:DEVOPS_TENANT_ID;
     DevOpsOrganization              = $ENV:DEVOPS_ORGANIZATION;
     DevOpsProjectName               = $ENV:DEVOPS_PROJECT_NAME;
