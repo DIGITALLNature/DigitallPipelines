@@ -28,6 +28,12 @@ parameters:
     type: boolean
     default: false
 
+  # Branch to push
+  - name: branch
+    displayName: Branch to push
+    type: string
+    default: main
+
   # Set configuration to import solutions unmanaged
   - name: importManaged
     displayName: Set configuration to import as managed
@@ -73,6 +79,7 @@ steps:
   # Stage, commit and push changes
   - template: ../git/quick-commit-push.yml
     parameters:
+      branch: ${{ parameters.branch }}
       ${{ if eq(parameters.skipCI, false) }}:
         commitMessage: "Update solution carriers"
       ${{ if eq(parameters.skipCI, true) }}:
