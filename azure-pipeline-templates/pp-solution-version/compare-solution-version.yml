@@ -51,13 +51,11 @@ steps:
         $SolutionUniqueName = "$env:SolutionUniqueName"
         $SourceSolutionsPath = "$env:SourceSolutionsPath"
         $TargetSolutionsPath = "$env:TargetSolutionsPath"
-        $Managed = [System.Environment]::GetEnvironmentVariable("SolutionConfig_$SolutionUniqueName_ImportManaged")
 
         if ($env:Debug -eq $True) {
           Write-Host "##[debug]SolutionUniqueName=$SolutionUniqueName"
           Write-Host "##[debug]SourceSolutionsPath=$SourceSolutionsPath"
           Write-Host "##[debug]TargetSolutionsPath=$TargetSolutionsPath"
-          Write-Host "##[debug]Managed=$Managed"
         }
 
         Write-Host "##[debug]Parse source solution versions"
@@ -104,7 +102,7 @@ steps:
         # If solution target version does not exist do not import as holding
         # If solution is patch do not import as holding
         $IsPatch = "$SolutionUniqueName" -match "^[A-Za-z0-9_]*(Patch_[0-9a-f]{8})$"
-        $ImportAsHolding = $Managed -eq $True -and !($TargetVersion -eq [System.Version]"0.0.0.0" -or $IsPatch)
+        $ImportAsHolding = !($TargetVersion -eq [System.Version]"0.0.0.0" -or $IsPatch)
 
         Write-Host "##[debug]Is patch: $IsPatch"
         Write-Host "##vso[task.setvariable variable=SolutionConfig_$($SolutionUniqueName)_IsPatch;isoutput=true]$IsPatch"
