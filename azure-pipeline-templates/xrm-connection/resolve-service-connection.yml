@@ -1,0 +1,89 @@
+# Copyright (c) DIGITALL Nature. All rights reserved
+# DIGITALL Nature licenses this file to you under the Microsoft Public License.
+
+# Reusable step template that extracts the non-secret metadata of an Azure DevOps
+# Power Platform service connection — environmentUrl, tenantId, applicationId, and the
+# connection's own id — and publishes them as step output variables.
+#
+# The service connection remains the single source of truth: nothing is hardcoded in the
+# consuming pipeline, and no secret is ever read, required, or exposed by this template. It
+# works regardless of the service connection's underlying authentication scheme (client secret
+# or Workload Identity Federation), since only non-secret endpoint fields are read.
+#
+# This template does not call dgtp (or any other tool) itself, so it has no dependency on dgtp
+# being installed. Combine the outputs with your own step to build a `dgtp connection create`
+# call (see DIGITALLNature/DigitallPower), a connection string, or feed any other tool that
+# needs these values.
+#
+# Usage:
+#
+#   resources:
+#     repositories:
+#       - repository: pipelinetemplates
+#         type: github
+#         name: DIGITALLNature/DigitallPipelines
+#         endpoint: DIGITALL Pipelines Service Connection
+#
+#   steps:
+#     - template: azure-pipeline-templates/xrm-connection/resolve-service-connection.yml@pipelinetemplates
+#       parameters:
+#         serviceConnectionName: 'MyPowerPlatformConnection'
+#
+#     # Example: Workload Identity Federation (OIDC), no client secret needed
+#     - pwsh: |
+#         dgtp connection create prod `
+#           --url $(resolveServiceConnection.environmentUrl) `
+#           --azure-devops-federated `
+#           --tenant $(resolveServiceConnection.tenantId) `
+#           --application-id $(resolveServiceConnection.applicationId) `
+#           --service-connection-id $(resolveServiceConnection.serviceConnectionId) `
+#           --no-verify
+#       env:
+#         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+#
+# If you need to resolve more than one service connection in the same job, pass a distinct
+# connectionTaskName per call so the step names don't collide.
+#
+# Requires:
+#   - The pipeline's build identity (usually "Project Collection Build Service") must have at
+#     least Reader access on the referenced service connection (Security tab), so the REST
+#     lookup below can read its (non-secret) url / tenantId / applicationId / endpoint id.
+#
+# Implementation notes:
+#   - Uses the "Get Service Endpoints By Names" REST operation
+#     (GET .../serviceendpoint/endpoints?endpointNames=...&type=...&api-version=7.1)
+#     rather than listing every endpoint in the project and filtering client-side. Available
+#     at the stable 7.1 API version, not just preview.
+#   - Filters on type=powerplatform-spn, the endpoint type registered by the Power Platform
+#     Build Tools extension (see extension/service-connections.json in
+#     microsoft/powerplatform-build-tools) — the same type regardless of whether the connection
+#     uses a client secret, Managed Identity, or Workload Identity Federation.
+
+parameters:
+  - name: serviceConnectionName
+    type: string
+  - name: connectionTaskName
+    type: string
+    default: resolveServiceConnection
+
+steps:
+  - pwsh: |
+      $headers = @{ Authorization = "Bearer $(System.AccessToken)" }
+      $encodedName = [uri]::EscapeDataString($env:ServiceConnectionName)
+      $uri = "$(System.CollectionUri)$(System.TeamProject)/_apis/serviceendpoint/endpoints?endpointNames=$encodedName&type=powerplatform-spn&api-version=7.1"
+      $response = Invoke-RestMethod -Uri $uri -Headers $headers -Method Get
+      $conn = $response.value | Select-Object -First 1
+
+      if (-not $conn) {
+        throw "Service connection '$env:ServiceConnectionName' of type 'powerplatform-spn' not found, or the pipeline's build identity lacks Reader access to it."
+      }
+
+      Write-Host "##vso[task.setvariable variable=environmentUrl;isOutput=true]$($conn.url)"
+      Write-Host "##vso[task.setvariable variable=tenantId;isOutput=true]$($conn.authorization.parameters.tenantid)"
+      Write-Host "##vso[task.setvariable variable=applicationId;isOutput=true]$($conn.authorization.parameters.serviceprincipalid)"
+      Write-Host "##vso[task.setvariable variable=serviceConnectionId;isOutput=true]$($conn.id)"
+    name: ${{ parameters.connectionTaskName }}
+    displayName: 'Resolve ${{ parameters.serviceConnectionName }} (url / tenant / application / connection id)'
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+      ServiceConnectionName: ${{ parameters.serviceConnectionName }}
