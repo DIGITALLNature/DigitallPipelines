@@ -51,8 +51,9 @@
 #
 # Implementation notes:
 #   - Uses the "Get Service Endpoints By Names" REST operation
-#     (GET .../serviceendpoint/endpoints?endpointNames=...&type=...&api-version=7.2-preview.4)
-#     rather than listing every endpoint in the project and filtering client-side.
+#     (GET .../serviceendpoint/endpoints?endpointNames=...&type=...&api-version=7.1)
+#     rather than listing every endpoint in the project and filtering client-side. Available
+#     at the stable 7.1 API version, not just preview.
 #   - Filters on type=powerplatform-spn, the endpoint type registered by the Power Platform
 #     Build Tools extension (see extension/service-connections.json in
 #     microsoft/powerplatform-build-tools) — the same type regardless of whether the connection
@@ -69,7 +70,7 @@ steps:
   - pwsh: |
       $headers = @{ Authorization = "Bearer $(System.AccessToken)" }
       $encodedName = [uri]::EscapeDataString($env:ServiceConnectionName)
-      $uri = "$(System.CollectionUri)$(System.TeamProject)/_apis/serviceendpoint/endpoints?endpointNames=$encodedName&type=powerplatform-spn&api-version=7.2-preview.4"
+      $uri = "$(System.CollectionUri)$(System.TeamProject)/_apis/serviceendpoint/endpoints?endpointNames=$encodedName&type=powerplatform-spn&api-version=7.1"
       $response = Invoke-RestMethod -Uri $uri -Headers $headers -Method Get
       $conn = $response.value | Select-Object -First 1
 
